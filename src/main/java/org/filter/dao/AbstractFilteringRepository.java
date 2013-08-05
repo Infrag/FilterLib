@@ -5,8 +5,7 @@ import org.filter.dao.defaultprocessors.DefaultProcessor;
 import org.filter.dao.defaultprocessors.Interval;
 import org.filter.dao.defaultprocessors.IntervalProcessor;
 import org.filter.dao.defaultprocessors.OrderProcessor;
-import org.filter.dao.defaultprocessors.Ordering;
-import org.filter.dao.defaultprocessors.OrderingProcessor;
+import org.filter.dao.defaultprocessors.SortProcessor;
 import org.filter.dao.defaultprocessors.StringLikeProcessor;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -22,24 +21,29 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.reflect.FieldUtils;
+import org.filter.dao.defaultprocessors.ClassProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 
 /**
  *
  * @author Ondrej.Bozek
  */
-public abstract class AbstractFilteringRepository<T, U extends Pageable> implements FilteringRepository<T, U> {
+public abstract class AbstractFilteringRepository<T, U extends Pageable> implements FilteringRepository<T, U>
+{
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractFilteringRepository.class);
-    private static final Set<String> generalFields;
+    private static Set<String> ignoredFields;
     public static final String ID_FIELD = "id";
     /**
      * by adding custom field processors to this Map, particular filter fields
@@ -76,7 +80,7 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
         }
         // TODO! improve this Hack
         fields.remove("order");
-        generalFields = fields;
+        ignoredFields = fields;
 
         Map<Class<?>, CustomFieldProcessor> processors = new HashMap<Class<?>, CustomFieldProcessor>();
         processors.put(Collection.class, new CollectionProcessor());
@@ -87,12 +91,23 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
         processors = new HashMap<Class<?>, CustomFieldProcessor>();
 
         OrderProcessor orderProcessor = new OrderProcessor();
-        processors.put(Order.class, orderProcessor);
-        processors.put(Ordering.class, new OrderingProcessor(orderProcessor));
+        addCustomClassProcessor(Order.class, orderProcessor);
+        addCustomClassProcessor(Sort.class, new SortProcessor(orderProcessor));
         customClassProcessors = processors;
     }
 
-    public AbstractFilteringRepository() {
+    public AbstractFilteringRepository()
+    {
+    }
+
+    public static void setIgnoredFields(Set<String> fields)
+    {
+        ignoredFields = fields;
+    }
+
+    public static <C extends Object> void addCustomClassProcessor(Class<C> clazz, ClassProcessor<C> processor)
+    {
+        customClassProcessors.put(clazz, processor);
     }
 
     /**
@@ -108,7 +123,9 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
      * @return
      * @throws IllegalAccessException
      */
-    public QueryResults<T> filter(U filter) {
+    @Override
+    public Page<T> filter(U filter)
+    {
         Class<T> T = returnedClass();
         CriteriaBuilder cb = getEm().getCriteriaBuilder();
         CriteriaQuery<T> criteriaQuery = cb.createQuery(T);
@@ -138,7 +155,7 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
                 List<Field> fields = AbstractFilteringRepository.getInheritedPrivateFields(queryCriteria.getClass());
                 for (Field field : fields) {
                     // I want to skip static fields and fields which are cared of in different(specific way)
-                    if (!Modifier.isStatic(field.getModifiers()) && !generalFields.contains(field.getName())) {
+                    if (!Modifier.isStatic(field.getModifiers()) && !ignoredFields.contains(field.getName())) {
                         if (!field.isAccessible()) {
                             field.setAccessible(true);
                         }
@@ -229,9 +246,8 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
             }
         }
 
-        QueryResults<T> result = new QueryResults<T>();
-        result.setItems(query.getResultList());
-        result.setTotalCount(queryCount.getSingleResult().intValue());
+
+        PageImpl<T> result = new PageImpl<T>(query.getResultList(), filter, queryCount.getSingleResult().intValue());
         return result;
     }
 
@@ -242,7 +258,8 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
      * @param metaAnnotation
      * @return first Annotation annotated by specified annotation
      */
-    private <T extends Annotation> T getMetaAnnotation(Class<T> metaAnnotation, Field field) {
+    private <T extends Annotation> T getMetaAnnotation(Class<T> metaAnnotation, Field field)
+    {
         Annotation[] allAnnotations = field.getAnnotations();
         for (Annotation annotation : allAnnotations) {
             if (annotation.annotationType().isAnnotationPresent(metaAnnotation)) {
@@ -259,7 +276,8 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
      * @param f
      * @return
      */
-    private boolean shouldCheck(Field f) {
+    private boolean shouldCheck(Field f)
+    {
         boolean fieldChecked = f.getAnnotation(Unchecked.class) == null;
         return fieldChecked && f.getDeclaringClass().getAnnotation(Unchecked.class) == null;
     }
@@ -281,7 +299,8 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
      * @param entityClass
      * @param criteria
      */
-    public void addPreFilter(Class<?> entityClass, Pageable criteria) {
+    public void addPreFilter(Class<?> entityClass, Pageable criteria)
+    {
         preFilters.put(entityClass, criteria);
     }
 
@@ -289,7 +308,8 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
      *
      * @param entityClass
      */
-    public void removePreFilter(Class<?> entityClass) {
+    public void removePreFilter(Class<?> entityClass)
+    {
         preFilters.remove(entityClass);
     }
 
@@ -300,7 +320,8 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
      * @param filter
      * @return
      */
-    private Object getFilterFieldValue(Field field, Pageable filter) {
+    private Object getFilterFieldValue(Field field, Pageable filter)
+    {
         Object filterFieldValue = null;
         try {
             filterFieldValue = field.get(filter);
@@ -319,7 +340,8 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
      * @param annotation
      * @return
      */
-    protected Field getFieldWithAnnotation(Class clazz, Class annotation) {
+    protected Field getFieldWithAnnotation(Class clazz, Class annotation)
+    {
         Field result = null;
         Field fields[] = clazz.getDeclaredFields();
         for (Field field : fields) {
@@ -337,7 +359,8 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
      * @param type
      * @return
      */
-    public static List<Field> getInheritedPrivateFields(Class<?> type) {
+    public static List<Field> getInheritedPrivateFields(Class<?> type)
+    {
         List<Field> result = new ArrayList<Field>();
 
         Class<?> i = type;
@@ -359,7 +382,8 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
      * @param type
      * @return
      */
-    public static Field getInheritedPrivateField(Class<?> type, String fieldName) throws NoSuchFieldException {
+    public static Field getInheritedPrivateField(Class<?> type, String fieldName) throws NoSuchFieldException
+    {
         Field result = null;
         Class<?> i = type;
         while (i != null && i != Object.class && result == null) {
@@ -383,7 +407,8 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
      * @param predicates list in which custom predicate should be added
      * @param field custom filter field which can't be cared about generically
      */
-    private void processTypes(Object value, ProcessorContext<T> processorContext) {
+    private void processTypes(Object value, ProcessorContext<T> processorContext)
+    {
         CustomFieldProcessor cfp = getTypeProcessor(processorContext.getField().getType());
         System.out.println("cfp: " + cfp);
         if (cfp == null) {
@@ -399,7 +424,8 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
      * @param predicates list in which custom predicate should be added
      * @param field custom filter field which can't be cared about generically
      */
-    private boolean processCustomTypes(Object value, ProcessorContext<T> processorContext) {
+    private boolean processCustomTypes(Object value, ProcessorContext<T> processorContext)
+    {
         CustomFieldProcessor cfp = getCustomTypeProcessor(processorContext.getField().getType());
         System.out.println("cfp: " + cfp);
         if (cfp != null) {
@@ -418,7 +444,8 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
      * @param field custom filter field which can't be cared about generically
      */
     private void processCustomFields(Object value, ProcessorContext<T> processorContext,
-            Class<CustomFieldProcessor<T, ?>> processorClass) {
+            Class<CustomFieldProcessor<T, ?>> processorClass)
+    {
         CustomFieldProcessor cfp = getFieldProcessor(processorClass);
         if (cfp != null) {
             cfp.processCustomField(value, processorContext);
@@ -433,7 +460,8 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
      * @throws InstantiationException
      * @throws IllegalAccessException
      */
-    public CustomFieldProcessor<T, ?> getTypeProcessor(Class clazz) {
+    public CustomFieldProcessor<T, ?> getTypeProcessor(Class clazz)
+    {
         CustomFieldProcessor<T, ?> cfp = classProcessors.get(clazz);
         return cfp;
     }
@@ -446,7 +474,8 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
      * @throws InstantiationException
      * @throws IllegalAccessException
      */
-    public CustomFieldProcessor<T, ?> getCustomTypeProcessor(Class clazz) {
+    public CustomFieldProcessor<T, ?> getCustomTypeProcessor(Class clazz)
+    {
         CustomFieldProcessor<T, ?> cfp = customClassProcessors.get(clazz);
         return cfp;
     }
@@ -459,7 +488,8 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
      * @throws InstantiationException
      * @throws IllegalAccessException
      */
-    public CustomFieldProcessor<T, ?> getFieldProcessor(Class<CustomFieldProcessor<T, ?>> processorClass) {
+    public CustomFieldProcessor<T, ?> getFieldProcessor(Class<CustomFieldProcessor<T, ?>> processorClass)
+    {
         CustomFieldProcessor<T, ?> cfp = registeredProcessors.get(processorClass);
         if (cfp == null) {
             if (processorClass != null) {

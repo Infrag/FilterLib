@@ -32,7 +32,14 @@
         <developerConnection>scm:git:git@github.com:Infrag/FilterLib.git</developerConnection>
     </scm>
     
-    <build>
+    <build>      
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ftp</artifactId>
+                <version>2.2</version>
+            </extension>
+        </extensions>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -89,5 +96,22 @@
             <version>2.0.0</version>
         </dependency>
     </dependencies>
-   
+    
+    <distributionManagement>
+        <repository>
+            <id>com.berit.release</id>
+            <name>BERIT Release Repository</name>
+            <url>ftp://brno-mvn/com.berit.release</url>
+            <layout>default</layout>
+            <uniqueVersion>false</uniqueVersion>
+        </repository>
+        <snapshotRepository>
+            <id>com.berit.snapshot</id>
+            <name>BERIT Snapshot Repository</name>
+            <url>ftp://brno-mvn/com.berit.snapshot</url>
+            <layout>default</layout>
+            <uniqueVersion>false</uniqueVersion>
+        </snapshotRepository>
+    </distributionManagement>
+
 </project>

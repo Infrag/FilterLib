@@ -1,5 +1,6 @@
 package org.filter.dao;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 /**
@@ -22,7 +23,7 @@ public interface FilteringRepository<T, F extends Pageable>
      * @return
      * @throws IllegalAccessException
      */
-    public QueryResults<T> filter(F filter);
+    public Page<T> filter(F filter);
 
     /**
      * <p>Method adds Filter to the Map of pre-filters</p>

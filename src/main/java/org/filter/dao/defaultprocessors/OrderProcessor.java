@@ -20,6 +20,7 @@ public class OrderProcessor implements ClassProcessor<Order>
 
     public static final String ORDER_PATH_SEPARATOR = ".";
 
+    @Override
     public void processCustomField(Order value, ProcessorContext<Object> processorContext)
     {
         // ordering
