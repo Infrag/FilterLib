@@ -1,17 +1,3 @@
-/*
- * Project: FilterLib
- * Copyright: ASSECO CE (c) 2011
- * $Workfile: $
- * Author: Ondrej Bozek
- * Created: Apr 26, 2013
- *
- * Version: $Revision: $
- *
- * Last revision date: $Date: $
- * Last revision by: $Author: $
- *
- * $Log: $
- */
 package org.filter.dao;
 
 /**

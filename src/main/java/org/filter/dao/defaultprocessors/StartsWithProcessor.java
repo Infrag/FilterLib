@@ -1,17 +1,3 @@
-/*
- * Project: FilterLib
- * Copyright: ASSECO CE (c) 2011
- * $Workfile: $
- * Author: Ondrej Bozek
- * Created: Jul 18, 2013
- *
- * Version: $Revision: $
- *
- * Last revision date: $Date: $
- * Last revision by: $Author: $
- *
- * $Log: $
- */
 package org.filter.dao.defaultprocessors;
 
 import org.filter.dao.ProcessorContext;
@@ -25,6 +11,7 @@ import org.apache.commons.lang.StringUtils;
 public class StartsWithProcessor implements ClassProcessor<String>
 {
 
+    @Override
     public void processCustomField(String value, ProcessorContext<Object> processorContext)
     {
         if (StringUtils.isNotBlank(value)) {
