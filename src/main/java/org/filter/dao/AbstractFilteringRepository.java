@@ -39,7 +39,7 @@ import org.springframework.data.domain.Sort.Order;
  *
  * @author Ondrej.Bozek
  */
-public abstract class AbstractFilteringRepository<T, U extends Pageable> implements FilteringRepository<T, U>
+public abstract class AbstractFilteringRepository<T, U extends Pageable> implements FilteringRepository<T, U, Page<T>>
 {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractFilteringRepository.class);
@@ -63,7 +63,7 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
      * can be individually treated
      *
      */
-    protected static final Map<Class<?>, CustomFieldProcessor> customClassProcessors;
+    protected static final Map<Class<?>, CustomFieldProcessor> customClassProcessors = new HashMap<Class<?>, CustomFieldProcessor>();
     /**
      * Pre filters are used for pre-filtering of results, can be used for row
      * level security, multitenancy, shared tables, soft deletes, data history,
@@ -88,12 +88,10 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
         processors.put(Interval.class, new IntervalProcessor());
         processors.put(Object.class, new DefaultProcessor());
         classProcessors = processors;
-        processors = new HashMap<Class<?>, CustomFieldProcessor>();
 
         OrderProcessor orderProcessor = new OrderProcessor();
         addCustomClassProcessor(Order.class, orderProcessor);
         addCustomClassProcessor(Sort.class, new SortProcessor(orderProcessor));
-        customClassProcessors = processors;
     }
 
     public AbstractFilteringRepository()
@@ -234,7 +232,7 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
 
         TypedQuery<T> query = getEm().createQuery(criteriaQuery);
         TypedQuery<Long> queryCount = getEm().createQuery(criteriaQueryCount);
-        if (filter != null && filter.getPageSize() <= 0) {
+        if (filter != null && filter.getPageSize() > 0) {
             query = query.setFirstResult(filter.getOffset());
             query = query.setMaxResults(filter.getPageSize());
         }
@@ -299,7 +297,8 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
      * @param entityClass
      * @param criteria
      */
-    public void addPreFilter(Class<?> entityClass, Pageable criteria)
+    @Override
+    public <C extends Pageable> void addPreFilter(Class<?> entityClass, C criteria)
     {
         preFilters.put(entityClass, criteria);
     }
@@ -308,6 +307,7 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
      *
      * @param entityClass
      */
+    @Override
     public void removePreFilter(Class<?> entityClass)
     {
         preFilters.remove(entityClass);

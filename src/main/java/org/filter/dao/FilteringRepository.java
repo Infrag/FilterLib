@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
  *
  * @author Ondrej.Bozek
  */
-public interface FilteringRepository<T, F extends Pageable>
+public interface FilteringRepository<T, F extends Pageable, P extends Page<T>>
 {
 
     /**
@@ -23,7 +23,7 @@ public interface FilteringRepository<T, F extends Pageable>
      * @return
      * @throws IllegalAccessException
      */
-    public Page<T> filter(F filter);
+    public P filter(F filter);
 
     /**
      * <p>Method adds Filter to the Map of pre-filters</p>
@@ -42,7 +42,7 @@ public interface FilteringRepository<T, F extends Pageable>
      * @param entityClass
      * @param criteria
      */
-    public void addPreFilter(Class<?> entityClass, Pageable criteria);
+    public <C extends Pageable> void addPreFilter(Class<?> entityClass, C criteria);
 
     /**
      * Remove filter for selected entity
