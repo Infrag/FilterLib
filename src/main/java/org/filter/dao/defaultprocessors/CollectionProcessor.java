@@ -1,5 +1,6 @@
 package org.filter.dao.defaultprocessors;
 
+import java.util.ArrayList;
 import org.filter.dao.ProcessorContext;
 import java.util.Collection;
 import javax.persistence.criteria.Path;
@@ -21,6 +22,7 @@ public class CollectionProcessor<T extends Comparable> implements ClassProcessor
             Predicate p;
             Path path = processorContext.getPath();
             if (value.contains(null)) {
+                value = new ArrayList<T>(value);
                 value.remove(null);
                 p = processorContext.getCriteriaBuilder().or(path.in(value), path.isNull());
             } else {
