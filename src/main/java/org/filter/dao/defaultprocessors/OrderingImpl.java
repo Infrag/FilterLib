@@ -9,6 +9,7 @@ public class OrderingImpl implements Ordering
 
     private List<Order> orders;
 
+    @Override
     public List<Order> getOrders()
     {
         if (orders == null) {

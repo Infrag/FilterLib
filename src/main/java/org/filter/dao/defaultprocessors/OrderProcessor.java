@@ -1,9 +1,7 @@
 package org.filter.dao.defaultprocessors;
 
-
 import org.filter.dao.ProcessorContext;
 import org.filter.dao.StructuredPathFactory;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Path;
@@ -26,7 +24,9 @@ public class OrderProcessor implements ClassProcessor<Order>
         // ordering
         if (value != null && StringUtils.isNotBlank(value.getProperty())) {
             CriteriaBuilder cb = processorContext.getEntityManager().getCriteriaBuilder();
-            processorContext.getCriteriaQuery().orderBy(getOrdering(value, processorContext, cb));
+            List<javax.persistence.criteria.Order> orders = processorContext.getCriteriaQuery().getOrderList();
+            orders.add(getOrdering(value, processorContext, cb));
+            processorContext.getCriteriaQuery().orderBy(orders);
         }
     }
 
@@ -39,14 +39,12 @@ public class OrderProcessor implements ClassProcessor<Order>
      * @param cb
      * @return
      */
-    private List<javax.persistence.criteria.Order> getOrdering(Order order, ProcessorContext<Object> processorContext, CriteriaBuilder cb)
+    private javax.persistence.criteria.Order getOrdering(Order order, ProcessorContext<Object> processorContext, CriteriaBuilder cb)
     {
-        List<javax.persistence.criteria.Order> result = new ArrayList<javax.persistence.criteria.Order>();
+        javax.persistence.criteria.Order result = null;
         if (order != null && StringUtils.isNotEmpty(order.getProperty())) {
             Path path = StructuredPathFactory.navigate(order.getProperty(), ORDER_PATH_SEPARATOR, processorContext.getEntityRoot()).getPath();
-            result.add(order.isAscending()
-                    ? cb.asc(path)
-                    : cb.desc(path));
+            result = order.isAscending() ? cb.asc(path) : cb.desc(path);
         }
         return result;
     }
