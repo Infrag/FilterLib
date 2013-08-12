@@ -1,5 +1,6 @@
 package org.filter.dao.defaultprocessors;
 
+import java.util.ArrayList;
 import org.filter.dao.ProcessorContext;
 import org.filter.dao.StructuredPathFactory;
 import java.util.List;
@@ -25,6 +26,9 @@ public class OrderProcessor implements ClassProcessor<Order>
         if (value != null && StringUtils.isNotBlank(value.getProperty())) {
             CriteriaBuilder cb = processorContext.getEntityManager().getCriteriaBuilder();
             List<javax.persistence.criteria.Order> orders = processorContext.getCriteriaQuery().getOrderList();
+            if (orders == null) {
+                orders = new ArrayList<javax.persistence.criteria.Order>();
+            }
             orders.add(getOrdering(value, processorContext, cb));
             processorContext.getCriteriaQuery().orderBy(orders);
         }

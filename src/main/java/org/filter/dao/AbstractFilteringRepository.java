@@ -410,7 +410,7 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
     private void processTypes(Object value, ProcessorContext<T> processorContext)
     {
         CustomFieldProcessor cfp = getTypeProcessor(processorContext.getField().getType());
-        System.out.println("cfp: " + cfp);
+        LOG.debug("processTypes() - CustomFieldProcessor: " + cfp);
         if (cfp == null) {
             cfp = getTypeProcessor(Object.class);
         }
@@ -427,7 +427,7 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
     private boolean processCustomTypes(Object value, ProcessorContext<T> processorContext)
     {
         CustomFieldProcessor cfp = getCustomTypeProcessor(processorContext.getField().getType());
-        System.out.println("cfp: " + cfp);
+        LOG.debug("processCustomTypes() - CustomFieldProcessor: " + cfp);
         if (cfp != null) {
             cfp.processCustomField(value, processorContext);
             return true;

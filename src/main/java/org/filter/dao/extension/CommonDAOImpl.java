@@ -3,6 +3,8 @@ package org.filter.dao.extension;
 import org.filter.dao.CommonFilteringRepository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 
 /**
@@ -13,6 +15,7 @@ public class CommonDAOImpl<T extends EntityInterface, U extends Pageable, V>
         extends CommonFilteringRepository<T, U>
 {
 
+    private static final Logger LOG = LoggerFactory.getLogger(CommonDAOImpl.class);
     @PersistenceContext(name = "DmvsPersisteceUnit")
     protected EntityManager entityManager;
 
@@ -23,7 +26,7 @@ public class CommonDAOImpl<T extends EntityInterface, U extends Pageable, V>
     public T getEntity(V id)
     {
         Class<T> returned = returnedClass();
-        System.out.println("Returned class: " + returned);
+        LOG.debug("Returned class: " + returned);
         return entityManager.find(returnedClass(), id);
     }
 
