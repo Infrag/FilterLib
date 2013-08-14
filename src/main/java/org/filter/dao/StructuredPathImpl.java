@@ -18,7 +18,7 @@ import org.apache.commons.lang.StringUtils;
  *
  * @author Ondrej.Bozek
  */
-public class StructuredPathImpl implements StructuredPath
+public class StructuredPathImpl<X> implements StructuredPath<X>
 {
 
     private List<String> pathLevels;

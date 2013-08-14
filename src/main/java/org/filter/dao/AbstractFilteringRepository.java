@@ -147,8 +147,8 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
 
                 List<Predicate> orPredicates = new ArrayList<Predicate>();
                 List<Predicate> andPredicates = new ArrayList<Predicate>();
-                FilterContextImpl<T> queryContext = new FilterContextImpl<T>(entity, criteriaQuery, getEm(), queryCriteria);
-                hints.addAll(queryContext.getHints());
+                FilterContextImpl<T> filterContext = new FilterContextImpl<T>(entity, criteriaQuery, getEm(), queryCriteria);
+                hints.addAll(filterContext.getHints());
 
                 List<Field> fields = AbstractFilteringRepository.getInheritedPrivateFields(queryCriteria.getClass());
                 for (Field field : fields) {
@@ -176,7 +176,7 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
                             processor = getMetaAnnotation(CustomProcessor.class, field);
                         }
 
-                        ProcessorContext<T> processorContext = queryContext.getProcessorContext(andPredicates, orPredicates, field);
+                        ProcessorContext<T> processorContext = filterContext.getProcessorContext(andPredicates, orPredicates, field);
                         Object filterFieldValue = getFilterFieldValue(field, queryCriteria);
                         if (processor == null && f != null) {
                             processTypes(filterFieldValue, processorContext);

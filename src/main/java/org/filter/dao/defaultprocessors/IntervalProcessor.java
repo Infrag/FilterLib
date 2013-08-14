@@ -1,17 +1,16 @@
 package org.filter.dao.defaultprocessors;
 
-import org.filter.dao.ProcessorContext;
 import javax.persistence.criteria.CriteriaBuilder;
+import org.filter.dao.ProcessorContext;
 
 /**
  *
  * @author Ondrej.Bozek
  */
-public class IntervalProcessor<T extends Comparable> implements ClassProcessor<Interval<T>>
-{
+public class IntervalProcessor<T extends Comparable> implements ClassProcessor<Interval<T>> {
 
-    public void processCustomField(Interval<T> value, ProcessorContext<Object> processorContext)
-    {
+    @Override
+    public void processCustomField(Interval<T> value, ProcessorContext<Object> processorContext) {
 //        predicates.add(cb.like(cb.lower(navigate(field.getName(), FILTER_PATH_SEPARATOR, entity)), "%" + ((String) field.get(filter)).toLowerCase() + "%"));
         // there is some bound specified 
         if (value != null && (value.maxIsNotNull() || value.minIsNotNull())) {
@@ -37,20 +36,20 @@ public class IntervalProcessor<T extends Comparable> implements ClassProcessor<I
             // Add upper bound
             if (value.maxIsNotNull()) {
                 if (value.getMax().isInclusive()) {
-                    processorContext.addPredicate(cb.lessThanOrEqualTo(processorContext.getPath(),
+                    processorContext.addPredicate(cb.lessThanOrEqualTo(processorContext.<T>getPath(),
                             value.getMax().getValue()));
                 } else {
-                    processorContext.addPredicate(cb.lessThan(processorContext.getPath(),
+                    processorContext.addPredicate(cb.lessThan(processorContext.<T>getPath(),
                             value.getMax().getValue()));
                 }
             }
             // Add lower bound
             if (value.minIsNotNull()) {
                 if (value.getMin().isInclusive()) {
-                    processorContext.addPredicate(cb.greaterThanOrEqualTo(processorContext.getPath(),
+                    processorContext.addPredicate(cb.greaterThanOrEqualTo(processorContext.<T>getPath(),
                             value.getMin().getValue()));
                 } else {
-                    processorContext.addPredicate(cb.greaterThan(processorContext.getPath(),
+                    processorContext.addPredicate(cb.greaterThan(processorContext.<T>getPath(),
                             value.getMin().getValue()));
                 }
             }

@@ -1,9 +1,5 @@
 package org.filter.dao.defaultprocessors;
 
-import org.filter.dao.AbstractFilteringRepository;
-import org.filter.dao.ProcessorContext;
-import org.filter.dao.StructuredPath;
-import org.filter.dao.StructuredPathFactory;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -11,6 +7,10 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import org.filter.dao.AbstractFilteringRepository;
+import org.filter.dao.ProcessorContext;
+import org.filter.dao.StructuredPath;
+import org.filter.dao.StructuredPathFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,12 +23,13 @@ public class DefaultProcessor implements ClassProcessor<Object>
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultProcessor.class);
 
+    @Override
     public void processCustomField(Object value, ProcessorContext<Object> processorContext)
     {
         if (processorContext.shouldProcess(value)) {
             CriteriaBuilder cb = processorContext.getCriteriaBuilder();
 
-            StructuredPath path = processorContext.getStructuredPath();
+            StructuredPath<String> path = processorContext.getStructuredPath();
             Root<Object> root = processorContext.getEntityRoot();
             Class javaType = root.getJavaType();
             try {

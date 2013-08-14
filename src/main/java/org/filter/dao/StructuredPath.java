@@ -7,8 +7,7 @@ import javax.persistence.criteria.Path;
  *
  * @author Ondrej.Bozek
  */
-public interface StructuredPath extends Path
-{
+public interface StructuredPath<X> extends Path<X> {
 
     /**
      * method navigates from starting point using provided path

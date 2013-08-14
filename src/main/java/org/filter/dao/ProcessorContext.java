@@ -6,11 +6,11 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 
 /**
+ * T - represents entity type
  *
  * @author Ondrej.Bozek
  */
-public interface ProcessorContext<T> extends FilterContext<T>
-{
+public interface ProcessorContext<T> extends FilterContext<T> {
 
     public Field getField();
 
@@ -18,10 +18,10 @@ public interface ProcessorContext<T> extends FilterContext<T>
 
     public StructuredPath getStructuredPath();
 
-    public Path getPath();
+    public <U> Path<U> getPath();
 
     public List<Predicate> getAndPredicates();
-    
+
     public List<Predicate> getOrPredicates();
 
     public Predicate addPredicate(Predicate predicate);

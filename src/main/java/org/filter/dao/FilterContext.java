@@ -7,6 +7,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 /**
+ * T - represents entity type
  *
  * @author Ondrej.Bozek
  */

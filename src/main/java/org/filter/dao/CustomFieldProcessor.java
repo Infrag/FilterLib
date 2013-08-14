@@ -1,6 +1,8 @@
 package org.filter.dao;
 
 /**
+ * T - represents Entity type, 
+ * V - represents value from filter
  *
  * @author Ondrej.Bozek
  */
