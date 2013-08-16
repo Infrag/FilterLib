@@ -11,6 +11,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * This annotation enforces NULL value for annotated filter attribute, thus NULL
+ * attribute value doesn't mean "don't use for filtering" but means "retrieve
+ * only entities with attribute == NULL"
  *
  * @author Ondrej.Bozek
  */
