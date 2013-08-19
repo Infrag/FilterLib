@@ -1,13 +1,18 @@
-package org.filter.task.filterlib;
+package org.filter;
 
+import java.net.URL;
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLNonTransientConnectionException;
+import java.util.logging.Level;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import org.apache.derby.tools.ij;
+import org.eclipse.persistence.internal.jpa.EntityManagerImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +24,7 @@ public class PersistenceTest extends TestCase {
     private static final Logger log = LoggerFactory.getLogger(PersistenceTest.class);
     private EntityManagerFactory emFactory;
     private EntityManager em;
+    private static final String SQL_DUMP_LOCATION = "META-INF/ClassicModels.sql";
 
     /**
      * Create the test case
@@ -35,6 +41,7 @@ public class PersistenceTest extends TestCase {
         try {
             log.info("Starting in-memory database for unit tests");
             Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+//            String "derby://localhost:1527/sample"
             DriverManager.getConnection("jdbc:derby:memory:unit-testing-jpa;create=true").close();
         } catch (Exception ex) {
             log.error("Error preparing in-memory DB for test.", ex);
@@ -44,6 +51,16 @@ public class PersistenceTest extends TestCase {
             log.info("Building JPA EntityManager for unit tests");
             emFactory = Persistence.createEntityManagerFactory("testPU");
             em = emFactory.createEntityManager();
+
+
+            URL resources = getClass().getClassLoader().getResource(SQL_DUMP_LOCATION);
+
+            Connection connection = ((EntityManagerImpl) (em
+                    .getDelegate())).getServerSession().getAccessor()
+                    .getConnection();
+            ij.runScript(connection, resources.openStream(),
+                    "UTF-8", new NullOutputStream(), "UTF-8");
+
         } catch (Exception ex) {
             log.error("Error Building JPA EntityManager for unit tests.", ex);
             fail("Exception during JPA EntityManager instanciation.");

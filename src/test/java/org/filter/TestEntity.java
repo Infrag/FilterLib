@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.filter.task.filterlib;
+package org.filter;
 
 import java.io.Serializable;
 import javax.persistence.Entity;
