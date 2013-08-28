@@ -26,7 +26,13 @@ public interface ProcessorContext<T> extends FilterContext<T> {
 
     public Predicate addPredicate(Predicate predicate);
 
-    public Boolean isNullEnforced();
-
+//    public Boolean isNullEnforced();
+    /**
+     * Method decides if value should be processed by processor, it also takes
+     * care about *null* values (instead of processor)
+     *
+     * @param value
+     * @return
+     */
     public Boolean shouldProcess(Object value);
 }

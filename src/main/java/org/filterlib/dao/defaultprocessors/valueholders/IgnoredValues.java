@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.filterlib.dao;
+package org.filterlib.dao.defaultprocessors.valueholders;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -20,6 +20,9 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE, ElementType.ANNOTATION_TYPE, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface ForceNull
-{
+public @interface IgnoredValues {
+
+    public static final String METHOD_NAME = "values";
+
+    public Class<? extends BasicValueHolder>[] values() default {BasicValueHolder.class};
 }

@@ -1,12 +1,5 @@
 package org.filterlib.dao;
 
-import org.filterlib.dao.defaultprocessors.CollectionProcessor;
-import org.filterlib.dao.defaultprocessors.DefaultProcessor;
-import org.filterlib.dao.defaultprocessors.Interval;
-import org.filterlib.dao.defaultprocessors.IntervalProcessor;
-import org.filterlib.dao.defaultprocessors.OrderProcessor;
-import org.filterlib.dao.defaultprocessors.SortProcessor;
-import org.filterlib.dao.defaultprocessors.StringLikeProcessor;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -26,6 +19,13 @@ import javax.persistence.criteria.Root;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.reflect.FieldUtils;
 import org.filterlib.dao.defaultprocessors.ClassProcessor;
+import org.filterlib.dao.defaultprocessors.CollectionProcessor;
+import org.filterlib.dao.defaultprocessors.DefaultProcessor;
+import org.filterlib.dao.defaultprocessors.Interval;
+import org.filterlib.dao.defaultprocessors.IntervalProcessor;
+import org.filterlib.dao.defaultprocessors.OrderProcessor;
+import org.filterlib.dao.defaultprocessors.SortProcessor;
+import org.filterlib.dao.defaultprocessors.StringLikeProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -80,6 +80,7 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
         }
         // TODO! improve this Hack
         fields.remove("order");
+        fields.remove("sort");
         ignoredFields = fields;
 
         Map<Class<?>, CustomFieldProcessor> processors = new HashMap<Class<?>, CustomFieldProcessor>();

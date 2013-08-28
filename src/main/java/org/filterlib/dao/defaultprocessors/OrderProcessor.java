@@ -1,12 +1,12 @@
 package org.filterlib.dao.defaultprocessors;
 
 import java.util.ArrayList;
-import org.filterlib.dao.ProcessorContext;
-import org.filterlib.dao.StructuredPathFactory;
 import java.util.List;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Path;
 import org.apache.commons.lang.StringUtils;
+import org.filterlib.dao.ProcessorContext;
+import org.filterlib.dao.StructuredPathFactory;
 import org.springframework.data.domain.Sort.Order;
 
 /**

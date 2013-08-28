@@ -1,8 +1,8 @@
 package org.filterlib.dao.extension;
 
-import org.filterlib.dao.CommonFilteringRepository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import org.filterlib.dao.CommonFilteringRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
  *
  * @author Ondrej.Bozek
  */
-public class CommonDAOImpl<T extends EntityInterface, U extends Pageable, V>
+public class CommonDAOImpl<T extends EntityInterface<ID>, U extends Pageable, ID>
         extends CommonFilteringRepository<T, U>
 {
 
@@ -23,14 +23,14 @@ public class CommonDAOImpl<T extends EntityInterface, U extends Pageable, V>
     {
     }
 
-    public T getEntity(V id)
+    public T getEntity(ID id)
     {
         Class<T> returned = returnedClass();
         LOG.debug("Returned class: " + returned);
         return entityManager.find(returnedClass(), id);
     }
 
-    public void removeEntity(V id)
+    public void removeEntity(ID id)
     {
         entityManager.remove(entityManager.find(returnedClass(), id));
     }

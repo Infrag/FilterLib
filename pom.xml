@@ -132,7 +132,7 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    
+<!--    
     <distributionManagement>
         <repository>
             <id>com.berit.release</id>
@@ -148,6 +148,6 @@
             <layout>default</layout>
             <uniqueVersion>false</uniqueVersion>
         </snapshotRepository>
-    </distributionManagement>
+    </distributionManagement>-->
 
 </project>
