@@ -24,7 +24,6 @@ public interface FilteringRepository<T, F extends Pageable, P extends Page<T>>
      * @throws IllegalAccessException
      */
     public P filter(F filter);
-
     /**
      * <p>Method adds Filter to the Map of pre-filters</p>
      *
@@ -42,12 +41,12 @@ public interface FilteringRepository<T, F extends Pageable, P extends Page<T>>
      * @param entityClass
      * @param criteria
      */
-    public <C extends Pageable> void addPreFilter(Class<?> entityClass, C criteria);
-
-    /**
-     * Remove filter for selected entity
-     *
-     * @param entityClass
-     */
-    public void removePreFilter(Class<?> entityClass);
+//    public <C extends Pageable> void addPreFilter(Class<?> entityClass, C criteria);
+//
+//    /**
+//     * Remove filter for selected entity
+//     *
+//     * @param entityClass
+//     */
+//    public void removePreFilter(Class<?> entityClass);
 }
