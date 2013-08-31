@@ -10,7 +10,6 @@ import javax.persistence.criteria.Root;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Pageable;
 
 public class ProcessorContextImpl<P> extends FilterContextImpl<P> implements ProcessorContext<P> {
 
@@ -22,7 +21,7 @@ public class ProcessorContextImpl<P> extends FilterContextImpl<P> implements Pro
 
     ProcessorContextImpl(List<Predicate> andPredicates, List<Predicate> orPredicates,
             Root<P> entity, Field field, CriteriaQuery<P> query,
-            EntityManager entityManager, Pageable criteria) {
+            EntityManager entityManager, Object criteria) {
         super(entity, query, entityManager, criteria);
         this.field = field;
         this.andPredicates = andPredicates;

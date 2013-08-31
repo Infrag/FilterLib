@@ -26,6 +26,7 @@ import org.filterlib.dao.defaultprocessors.IntervalProcessor;
 import org.filterlib.dao.defaultprocessors.OrderProcessor;
 import org.filterlib.dao.defaultprocessors.SortProcessor;
 import org.filterlib.dao.defaultprocessors.StringLikeProcessor;
+import org.filterlib.dao.extension.PreFilterAccessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -69,7 +70,8 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
      * level security, multitenancy, shared tables, soft deletes, data history,
      * temporal filtering etc...
      */
-    protected static final Map<Class<?>, Pageable> preFilters = new HashMap<Class<?>, Pageable>();
+    private PreFilterAccessor preFilterAccessor;
+//    protected static final Map<Class<?>, Pageable> preFilters = new HashMap<Class<?>, Pageable>();
 
     static {
         Set<String> fields = new HashSet<String>();
@@ -134,17 +136,15 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
         criteriaQuery.select(entity);
 
         // collect all filters relevant for affected entity
-        List<Pageable> filters = new ArrayList<Pageable>();
-        Pageable preFilter = preFilters.get(T);
-        if (preFilter != null) {
-            filters.add(preFilter);
-        }
+        List<Object> filters = new ArrayList<Object>();
+        getPreFilters(filters, T, filter);
+
         filters.add(filter);
         List<Hint> hints = new ArrayList<Hint>();
 
         if (!filters.isEmpty()) {
             List<Predicate> filterPredicates = new ArrayList<Predicate>();
-            for (Pageable queryCriteria : filters) {
+            for (Object queryCriteria : filters) {
 
                 List<Predicate> orPredicates = new ArrayList<Predicate>();
                 List<Predicate> andPredicates = new ArrayList<Predicate>();
@@ -251,6 +251,32 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
     }
 
     /**
+     * Method for accessing PreFilters, particular implementation is left for
+     * users of this library - retrieving of filters from provided filter, or
+     * i.e. some session object
+     *
+     * <p>Pre filters are used for pre-filtering of results. These filters are
+     * always utilized for all searches for matching entities.</p> Can be used
+     * for: <ul> <li>row level security, </li> <li>multitenancy, </li>
+     * <li>shared tables, </li> <li>soft deletes, </li> <li>data history,</li>
+     * <li>temporal filtering </li> <li>etc...</li> </ul>
+     *
+     * If filter for provided class already existed, it will be replaced
+     *
+     * TODO QueryCriteria is not ideal preFilter ancestor should be replaced
+     * with different class TODO add cache for pre-filter Predicates
+     *
+     * @return
+     */
+    protected List<Object> getPreFilters(List<Object> list, Class<T> entityClass, Pageable filter)
+    {
+        if (preFilterAccessor != null) {
+            list.addAll(preFilterAccessor.getPreFilters(entityClass, filter));
+        }
+        return list;
+    }
+
+    /**
      * Method searches for first annotation on field which is meta-annotated by
      * specified annotation
      *
@@ -298,22 +324,21 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
      * @param entityClass
      * @param criteria
      */
-    @Override
-    public <C extends Pageable> void addPreFilter(Class<?> entityClass, C criteria)
-    {
-        preFilters.put(entityClass, criteria);
-    }
-
-    /**
-     *
-     * @param entityClass
-     */
-    @Override
-    public void removePreFilter(Class<?> entityClass)
-    {
-        preFilters.remove(entityClass);
-    }
-
+//    @Override
+//    public <C extends Pageable> void addPreFilter(Class<?> entityClass, C criteria)
+//    {
+//        preFilters.put(entityClass, criteria);
+//    }
+//
+//    /**
+//     *
+//     * @param entityClass
+//     */
+//    @Override
+//    public void removePreFilter(Class<?> entityClass)
+//    {
+//        preFilters.remove(entityClass);
+//    }
     /**
      * Retrieve field value from object (usually Filter)
      *
@@ -321,7 +346,7 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
      * @param filter
      * @return
      */
-    private Object getFilterFieldValue(Field field, Pageable filter)
+    private Object getFilterFieldValue(Field field, Object filter)
     {
         Object filterFieldValue = null;
         try {
@@ -510,4 +535,14 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
     protected abstract Class<T> returnedClass();
 
     protected abstract EntityManager getEm();
+
+    public PreFilterAccessor getPreFilterAccessor()
+    {
+        return preFilterAccessor;
+    }
+
+    public void setPreFilterAccessor(PreFilterAccessor preFilterAccessor)
+    {
+        this.preFilterAccessor = preFilterAccessor;
+    }
 }

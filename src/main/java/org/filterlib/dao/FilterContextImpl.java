@@ -13,13 +13,13 @@ import org.springframework.data.domain.Pageable;
 public class FilterContextImpl<T> implements FilterContext<T>
 {
 
-    private Pageable criteria;
+    private Object criteria;
     private Root<T> entity;
     private CriteriaQuery<T> query;
     private EntityManager entityManager;
     private List<Hint> hints;
 
-    FilterContextImpl(Root<T> entity, CriteriaQuery<T> query, EntityManager entityManager, Pageable criteria)
+    FilterContextImpl(Root<T> entity, CriteriaQuery<T> query, EntityManager entityManager, Object criteria)
     {
         this.entity = entity;
         this.entityManager = entityManager;

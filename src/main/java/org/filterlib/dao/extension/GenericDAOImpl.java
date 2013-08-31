@@ -11,26 +11,27 @@ import org.springframework.data.domain.Pageable;
  *
  * @author Ondrej.Bozek
  */
-public class GenericDAOImpl<T extends EntityInterface, U extends Pageable, V>
+public class GenericDAOImpl<T extends EntityInterface<ID>, U extends Pageable, ID>
         extends CommonFilteringRepository<T, U>
 {
 
     private static final Logger LOG = LoggerFactory.getLogger(GenericDAOImpl.class);
     @PersistenceContext
     protected EntityManager entityManager;
+    private PreFilterAccessor preFilterAccessor;
 
     public GenericDAOImpl()
     {
     }
 
-    public T getEntity(V id)
+    public T getEntity(ID id)
     {
         Class<T> returned = returnedClass();
         LOG.debug("Returned class: " + returned);
         return entityManager.find(returnedClass(), id);
     }
 
-    public void removeEntity(V id)
+    public void removeEntity(ID id)
     {
         entityManager.remove(entityManager.find(returnedClass(), id));
     }

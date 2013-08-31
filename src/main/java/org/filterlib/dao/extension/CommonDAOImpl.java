@@ -52,10 +52,4 @@ public class CommonDAOImpl<T extends EntityInterface<ID>, U extends Pageable, ID
     {
         return entityManager;
     }
-
-    @Override
-    public <C extends Pageable> void addPreFilter(Class<?> entityClass, C criteria)
-    {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }
