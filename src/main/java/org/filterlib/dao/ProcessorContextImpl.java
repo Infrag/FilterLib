@@ -1,19 +1,13 @@
 package org.filterlib.dao;
 
 import java.lang.reflect.Field;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import org.apache.commons.lang.StringUtils;
-import org.filterlib.dao.defaultprocessors.valueholders.BasicValueHolder;
-import org.filterlib.dao.defaultprocessors.valueholders.CustomIgnoredValueException;
-import org.filterlib.dao.defaultprocessors.valueholders.IgnoredValues;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
@@ -86,66 +80,6 @@ public class ProcessorContextImpl<P> extends FilterContextImpl<P> implements Pro
             andPredicates.add(predicate);
         }
         return predicate;
-    }
-
-    /**
-     * TODO This should be probably refactored to default abstract Processor
-     *
-     * @return
-     */
-    private Set<Object> getIgnoredValues() {
-        IgnoredValues iv = field.getAnnotation(IgnoredValues.class);
-        Class<? extends BasicValueHolder>[] ignoredValues = null;
-        if (iv == null) {
-            try {
-                ignoredValues = (Class<? extends BasicValueHolder>[]) IgnoredValues.class
-                        .getMethod(IgnoredValues.METHOD_NAME).getDefaultValue();
-            } catch (NoSuchMethodException nsme) {
-                LOG.error("System Error retrieving default ignored values", nsme);
-                throw new RuntimeException("System Error retrieving default ignored values", nsme);
-            }
-        } else {
-            ignoredValues = iv.values();
-        }
-        Set<Object> result = new HashSet<Object>();
-        for (Class<? extends BasicValueHolder> class1 : ignoredValues) {
-            try {
-                result.add(class1.getDeclaredField(BasicValueHolder.VALUE_FIELD_NAME).get(null));
-            } catch (Exception ex) {
-                LOG.error("Error retrieving custom ignored field vales.", ex);
-                throw new CustomIgnoredValueException("Error retrieving custom ignored field vales.", ex);
-            }
-        }
-        return result;
-
-    }
-
-    /**
-     * TODO This should be probably refactored to default abstract Processor
-     *
-     * Method decides if value should be processed by processor, it also takes
-     * care about *null* values (instead of processor)
-     *
-     * @param value
-     * @return
-     */
-    @Override
-    public Boolean shouldProcess(Object value) {
-        Set<Object> ignoredValues = getIgnoredValues();
-        if (ignoredValues.contains(null) && value == null) {
-            CriteriaBuilder cb = getCriteriaBuilder();
-
-//            Predicate p;
-//            if (isNegated()) {
-//                p = cb.isNotNull(getPath());
-//            } else {
-//                p = cb.isNull(getPath());
-//            }
-            Predicate p = cb.isNull(getPath());
-            addPredicate(p);
-            return false;
-        }
-        return !ignoredValues.contains(value);
     }
 
     @Override

@@ -4,6 +4,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Expression;
 import org.apache.commons.lang.StringUtils;
 import org.filterlib.dao.ProcessorContext;
+import org.filterlib.dao.defaultprocessors.valuerestrictions.BlankStringValueRestriction;
+import org.filterlib.dao.defaultprocessors.valuerestrictions.ValueRestriction;
 
 /**
  * Processor takes care about naive full text search
@@ -11,26 +13,31 @@ import org.filterlib.dao.ProcessorContext;
  *
  * @author Ondrej.Bozek
  */
-public class NaiveFullTextProcessor implements ClassProcessor<String> {
+public class NaiveFullTextProcessor extends AbstractClassProcessor<String> {
+
+    private static final Class[] DEFAULT_IGNORED_VALUES_RESTRICTIONS = {BlankStringValueRestriction.class};
 
     @Override
-    public void processCustomField(String value, ProcessorContext<Object> processorContext) {
-        if (StringUtils.isNotBlank(value)) {
-            Expression<String> expression = processorContext.getPath();
-            CriteriaBuilder cb = processorContext.getCriteriaBuilder();
+    protected Class<? extends ValueRestriction>[] getDefaultIgnoredValueRestrictions() {
+        return DEFAULT_IGNORED_VALUES_RESTRICTIONS;
+    }
 
-            // deal with CASE SENSITIVITY
-            NaiveFullText naiveFullTextAnnotation = processorContext.getField().getAnnotation(NaiveFullText.class);
-            if (!naiveFullTextAnnotation.caseSensitive()) {
-                value = value.toLowerCase();
-                expression = cb.lower(expression);
-            }
+    @Override
+    protected void processRelevantField(String value, ProcessorContext<Object> processorContext) {
+        Expression<String> expression = processorContext.getPath();
+        CriteriaBuilder cb = processorContext.getCriteriaBuilder();
 
-            String[] tokens = StringUtils.split(value);
-            for (String string : tokens) {
-                processorContext.addPredicate(
-                        cb.like(expression, "%" + string + "%"));
-            }
+        // deal with CASE SENSITIVITY
+        NaiveFullText naiveFullTextAnnotation = processorContext.getField().getAnnotation(NaiveFullText.class);
+        if (!naiveFullTextAnnotation.caseSensitive()) {
+            value = value.toLowerCase();
+            expression = cb.lower(expression);
+        }
+
+        String[] tokens = StringUtils.split(value);
+        for (String string : tokens) {
+            processorContext.addPredicate(
+                    cb.like(expression, "%" + string + "%"));
         }
     }
 }

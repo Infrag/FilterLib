@@ -7,6 +7,8 @@ import javax.persistence.criteria.Path;
 import org.apache.commons.lang.StringUtils;
 import org.filterlib.dao.ProcessorContext;
 import org.filterlib.dao.StructuredPathFactory;
+import org.filterlib.dao.defaultprocessors.valuerestrictions.BlankOrderValueRestriction;
+import org.filterlib.dao.defaultprocessors.valuerestrictions.ValueRestriction;
 import org.springframework.data.domain.Sort.Order;
 
 /**
@@ -14,24 +16,14 @@ import org.springframework.data.domain.Sort.Order;
  *
  * @author Ondrej.Bozek
  */
-public class OrderProcessor implements ClassProcessor<Order>
-{
+public class OrderProcessor extends AbstractClassProcessor<Order> {
 
     public static final String ORDER_PATH_SEPARATOR = ".";
+    private static final Class[] DEFAULT_IGNORED_VALUES_RESTRICTIONS = {BlankOrderValueRestriction.class};
 
     @Override
-    public void processCustomField(Order value, ProcessorContext<Object> processorContext)
-    {
-        // ordering
-        if (value != null && StringUtils.isNotBlank(value.getProperty())) {
-            CriteriaBuilder cb = processorContext.getEntityManager().getCriteriaBuilder();
-            List<javax.persistence.criteria.Order> orders = processorContext.getCriteriaQuery().getOrderList();
-            if (orders == null) {
-                orders = new ArrayList<javax.persistence.criteria.Order>();
-            }
-            orders.add(getOrdering(value, processorContext, cb));
-            processorContext.getCriteriaQuery().orderBy(orders);
-        }
+    protected Class<? extends ValueRestriction>[] getDefaultIgnoredValueRestrictions() {
+        return DEFAULT_IGNORED_VALUES_RESTRICTIONS;
     }
 
     /**
@@ -43,14 +35,24 @@ public class OrderProcessor implements ClassProcessor<Order>
      * @param cb
      * @return
      */
-    private javax.persistence.criteria.Order getOrdering(Order order, ProcessorContext<Object> processorContext, CriteriaBuilder cb)
-    {
+    private javax.persistence.criteria.Order getOrdering(Order order, ProcessorContext<Object> processorContext, CriteriaBuilder cb) {
         javax.persistence.criteria.Order result = null;
         if (order != null && StringUtils.isNotEmpty(order.getProperty())) {
             Path path = StructuredPathFactory.navigate(order.getProperty(), ORDER_PATH_SEPARATOR, processorContext.getEntityRoot()).getPath();
             result = order.isAscending() ? cb.asc(path) : cb.desc(path);
         }
         return result;
+    }
+
+    @Override
+    protected void processRelevantField(Order value, ProcessorContext<Object> processorContext) {
+        CriteriaBuilder cb = processorContext.getEntityManager().getCriteriaBuilder();
+        List<javax.persistence.criteria.Order> orders = processorContext.getCriteriaQuery().getOrderList();
+        if (orders == null) {
+            orders = new ArrayList<javax.persistence.criteria.Order>();
+        }
+        orders.add(getOrdering(value, processorContext, cb));
+        processorContext.getCriteriaQuery().orderBy(orders);
     }
 }
 // sort also by @Id field because of sorting bug in eclipselink and 

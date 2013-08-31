@@ -1,7 +1,7 @@
 package org.filterlib.dao.defaultprocessors;
 
-import org.filterlib.dao.ProcessorContext;
 import java.util.Iterator;
+import org.filterlib.dao.ProcessorContext;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 
@@ -10,7 +10,7 @@ import org.springframework.data.domain.Sort.Order;
  *
  * @author Ondrej.Bozek
  */
-public class SortProcessor implements ClassProcessor<Sort>
+public class SortProcessor extends AbstractClassProcessor<Sort> 
 {
 
     private OrderProcessor orderProcessor;
@@ -29,5 +29,10 @@ public class SortProcessor implements ClassProcessor<Sort>
                 orderProcessor.processCustomField(iterator.next(), processorContext);
             }
         }
+    }
+
+    @Override
+    protected void processRelevantField(Sort value, ProcessorContext<Object> processorContext) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

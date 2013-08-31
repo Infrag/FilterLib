@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.filterlib.dao.defaultprocessors.valueholders;
+package org.filterlib.dao.defaultprocessors.valuerestrictions;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -24,5 +24,5 @@ public @interface IgnoredValues {
 
     public static final String METHOD_NAME = "values";
 
-    public Class<? extends BasicValueHolder>[] values() default {BasicValueHolder.class};
+    public Class<? extends ValueRestriction>[] values() default {BasicValueRestriction.class};
 }

@@ -6,6 +6,5 @@ import org.filterlib.dao.CustomFieldProcessor;
  *
  * @author Ondrej.Bozek
  */
-public interface ClassProcessor<T> extends CustomFieldProcessor<Object, T>
-{
+public interface ClassProcessor<T> extends CustomFieldProcessor<Object, T> {
 }

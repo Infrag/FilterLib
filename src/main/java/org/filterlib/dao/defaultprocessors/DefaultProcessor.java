@@ -18,36 +18,32 @@ import org.slf4j.LoggerFactory;
  *
  * @author Ondrej.Bozek
  */
-public class DefaultProcessor implements ClassProcessor<Object>
-{
+public class DefaultProcessor extends AbstractClassProcessor<Object> {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultProcessor.class);
 
     @Override
-    public void processCustomField(Object value, ProcessorContext<Object> processorContext)
-    {
-        if (processorContext.shouldProcess(value)) {
-            CriteriaBuilder cb = processorContext.getCriteriaBuilder();
+    protected void processRelevantField(Object value, ProcessorContext<Object> processorContext) {
+        CriteriaBuilder cb = processorContext.getCriteriaBuilder();
 
-            StructuredPath<String> path = processorContext.getStructuredPath();
-            Root<Object> root = processorContext.getEntityRoot();
-            Class javaType = root.getJavaType();
-            try {
-                String firstLevel = path.getPathLevels().get(0);
-                // move this to structured path
-                if (AbstractFilteringRepository.getInheritedPrivateField(javaType, firstLevel).getType().isInstance(Collection.class)) {
-                    Join<Object, Object> join = root.join(firstLevel);
-                    List<String> levels = new ArrayList<String>(path.getPathLevels());
-                    levels.remove(0);
-                    path = StructuredPathFactory.navigate(levels, join);
-                }
-                Predicate p;
-                p = cb.equal(path.getPath(), value);
-                processorContext.addPredicate(p);
-            } catch (NoSuchFieldException nsfe) {
-                LOG.error("Error testing for multivalued relationship!", nsfe);
-                throw new RuntimeException("Error testing for multivalued relationship!", nsfe);
+        StructuredPath<String> path = processorContext.getStructuredPath();
+        Root<Object> root = processorContext.getEntityRoot();
+        Class javaType = root.getJavaType();
+        try {
+            String firstLevel = path.getPathLevels().get(0);
+            // move this to structured path
+            if (AbstractFilteringRepository.getInheritedPrivateField(javaType, firstLevel).getType().isInstance(Collection.class)) {
+                Join<Object, Object> join = root.join(firstLevel);
+                List<String> levels = new ArrayList<String>(path.getPathLevels());
+                levels.remove(0);
+                path = StructuredPathFactory.navigate(levels, join);
             }
+            Predicate p;
+            p = cb.equal(path.getPath(), value);
+            processorContext.addPredicate(p);
+        } catch (NoSuchFieldException nsfe) {
+            LOG.error("Error testing for multivalued relationship!", nsfe);
+            throw new RuntimeException("Error testing for multivalued relationship!", nsfe);
         }
     }
 }

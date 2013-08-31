@@ -10,6 +10,7 @@ import org.filterlib.dao.ProcessorContext;
 public class TransientProcessor implements ClassProcessor<Object>
 {
 
+    @Override
     public void processCustomField(Object value, ProcessorContext<Object> processorContext)
     {
     }

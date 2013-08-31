@@ -34,5 +34,5 @@ public interface ProcessorContext<T> extends FilterContext<T> {
      * @param value
      * @return
      */
-    public Boolean shouldProcess(Object value);
+//    public Boolean shouldProcess(Object value);
 }
