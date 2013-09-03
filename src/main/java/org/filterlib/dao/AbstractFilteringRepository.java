@@ -271,7 +271,10 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
     protected List<Object> getPreFilters(List<Object> list, Class<T> entityClass, Pageable filter)
     {
         if (preFilterAccessor != null) {
-            list.addAll(preFilterAccessor.getPreFilters(entityClass, filter));
+            List<Object> preFilters = preFilterAccessor.getPreFilters(entityClass, filter);
+            if (preFilters != null) {
+                list.addAll(preFilters);
+            }
         }
         return list;
     }
