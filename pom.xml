@@ -1,8 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-        
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>    
+    
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.filterlib</groupId>
+    <groupId>org.obozek</groupId>
     <artifactId>Filter-Lib</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -132,22 +137,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-<!--    
-    <distributionManagement>
-        <repository>
-            <id>com.berit.release</id>
-            <name>BERIT Release Repository</name>
-            <url>ftp://brno-mvn/com.berit.release</url>
-            <layout>default</layout>
-            <uniqueVersion>false</uniqueVersion>
-        </repository>
-        <snapshotRepository>
-            <id>com.berit.snapshot</id>
-            <name>BERIT Snapshot Repository</name>
-            <url>ftp://brno-mvn/com.berit.snapshot</url>
-            <layout>default</layout>
-            <uniqueVersion>false</uniqueVersion>
-        </snapshotRepository>
-    </distributionManagement>-->
 
 </project>
