@@ -29,7 +29,7 @@ public class PageFilter implements Pageable, Serializable {
      */
     public PageFilter(int page, int size) {
 
-        this(page, size, new Sort(new Sort.Order(null)));
+        this(page, size, null);
     }
 
     /**
