@@ -1,8 +1,8 @@
-package org.obozek.filterlib.extension;
+package org.obozek.filterlib.dao;
 
+import org.obozek.filterlib.CommonFilteringRepository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import org.obozek.filterlib.CommonFilteringRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
@@ -11,15 +11,16 @@ import org.springframework.data.domain.Pageable;
  *
  * @author Ondrej.Bozek
  */
-public class CommonDAOImpl<T extends EntityInterface<ID>, U extends Pageable, ID>
+public class GenericDAOImpl<T extends EntityInterface<ID>, U extends Pageable, ID>
         extends CommonFilteringRepository<T, U>
 {
 
-    private static final Logger LOG = LoggerFactory.getLogger(CommonDAOImpl.class);
-    @PersistenceContext(name = "DmvsPersisteceUnit")
+    private static final Logger LOG = LoggerFactory.getLogger(GenericDAOImpl.class);
+    @PersistenceContext
     protected EntityManager entityManager;
+    private PreFilterAccessor preFilterAccessor;
 
-    public CommonDAOImpl()
+    public GenericDAOImpl()
     {
     }
 

@@ -32,7 +32,7 @@ import javax.persistence.UniqueConstraint;
     @NamedQuery(name = "Offices.findByCountry", query = "SELECT o FROM Offices o WHERE o.country = :country"),
     @NamedQuery(name = "Offices.findByPostalcode", query = "SELECT o FROM Offices o WHERE o.postalcode = :postalcode"),
     @NamedQuery(name = "Offices.findByTerritory", query = "SELECT o FROM Offices o WHERE o.territory = :territory")})
-public class Offices implements Serializable {
+public class Office implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -55,10 +55,10 @@ public class Offices implements Serializable {
     @Column(name = "TERRITORY", length = 10)
     private String territory;
 
-    public Offices() {
+    public Office() {
     }
 
-    public Offices(String officecode) {
+    public Office(String officecode) {
         this.officecode = officecode;
     }
 
@@ -144,10 +144,10 @@ public class Offices implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Offices)) {
+        if (!(object instanceof Office)) {
             return false;
         }
-        Offices other = (Offices) object;
+        Office other = (Office) object;
         if ((this.officecode == null && other.officecode != null) || (this.officecode != null && !this.officecode.equals(other.officecode))) {
             return false;
         }

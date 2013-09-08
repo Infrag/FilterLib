@@ -26,7 +26,7 @@ import org.obozek.filterlib.processors.IntervalProcessor;
 import org.obozek.filterlib.processors.OrderProcessor;
 import org.obozek.filterlib.processors.SortProcessor;
 import org.obozek.filterlib.processors.StringLikeProcessor;
-import org.obozek.filterlib.extension.PreFilterAccessor;
+import org.obozek.filterlib.dao.PreFilterAccessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;

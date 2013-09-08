@@ -31,10 +31,10 @@ import javax.persistence.UniqueConstraint;
     @NamedQuery(name = "Payments.findByChecknumber", query = "SELECT p FROM Payments p WHERE p.paymentsPK.checknumber = :checknumber"),
     @NamedQuery(name = "Payments.findByPaymentdate", query = "SELECT p FROM Payments p WHERE p.paymentdate = :paymentdate"),
     @NamedQuery(name = "Payments.findByAmount", query = "SELECT p FROM Payments p WHERE p.amount = :amount")})
-public class Payments implements Serializable {
+public class Payment implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
-    protected PaymentsPK paymentsPK;
+    protected PaymentPK paymentsPK;
     @Column(name = "PAYMENTDATE")
     @Temporal(TemporalType.DATE)
     private Date paymentdate;
@@ -43,24 +43,24 @@ public class Payments implements Serializable {
     private Double amount;
     @JoinColumn(name = "CUSTOMERNUMBER", referencedColumnName = "CUSTOMERNUMBER", nullable = false, insertable = false, updatable = false)
     @ManyToOne(optional = false)
-    private Customers customers;
+    private Customer customers;
 
-    public Payments() {
+    public Payment() {
     }
 
-    public Payments(PaymentsPK paymentsPK) {
+    public Payment(PaymentPK paymentsPK) {
         this.paymentsPK = paymentsPK;
     }
 
-    public Payments(int customernumber, String checknumber) {
-        this.paymentsPK = new PaymentsPK(customernumber, checknumber);
+    public Payment(int customernumber, String checknumber) {
+        this.paymentsPK = new PaymentPK(customernumber, checknumber);
     }
 
-    public PaymentsPK getPaymentsPK() {
+    public PaymentPK getPaymentsPK() {
         return paymentsPK;
     }
 
-    public void setPaymentsPK(PaymentsPK paymentsPK) {
+    public void setPaymentsPK(PaymentPK paymentsPK) {
         this.paymentsPK = paymentsPK;
     }
 
@@ -80,11 +80,11 @@ public class Payments implements Serializable {
         this.amount = amount;
     }
 
-    public Customers getCustomers() {
+    public Customer getCustomers() {
         return customers;
     }
 
-    public void setCustomers(Customers customers) {
+    public void setCustomers(Customer customers) {
         this.customers = customers;
     }
 
@@ -98,10 +98,10 @@ public class Payments implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Payments)) {
+        if (!(object instanceof Payment)) {
             return false;
         }
-        Payments other = (Payments) object;
+        Payment other = (Payment) object;
         if ((this.paymentsPK == null && other.paymentsPK != null) || (this.paymentsPK != null && !this.paymentsPK.equals(other.paymentsPK))) {
             return false;
         }

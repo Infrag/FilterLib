@@ -29,10 +29,10 @@ import javax.persistence.UniqueConstraint;
     @NamedQuery(name = "Orderdetails.findByQuantityordered", query = "SELECT o FROM Orderdetails o WHERE o.quantityordered = :quantityordered"),
     @NamedQuery(name = "Orderdetails.findByPriceeach", query = "SELECT o FROM Orderdetails o WHERE o.priceeach = :priceeach"),
     @NamedQuery(name = "Orderdetails.findByOrderlinenumber", query = "SELECT o FROM Orderdetails o WHERE o.orderlinenumber = :orderlinenumber")})
-public class Orderdetails implements Serializable {
+public class Orderdetail implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
-    protected OrderdetailsPK orderdetailsPK;
+    protected OrderdetailPK orderdetailsPK;
     @Column(name = "QUANTITYORDERED")
     private Integer quantityordered;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
@@ -42,27 +42,27 @@ public class Orderdetails implements Serializable {
     private Short orderlinenumber;
     @JoinColumn(name = "PRODUCTCODE", referencedColumnName = "PRODUCTCODE", nullable = false, insertable = false, updatable = false)
     @ManyToOne(optional = false)
-    private Products products;
+    private Product products;
     @JoinColumn(name = "ORDERNUMBER", referencedColumnName = "ORDERNUMBER", nullable = false, insertable = false, updatable = false)
     @ManyToOne(optional = false)
-    private Orders orders;
+    private Order orders;
 
-    public Orderdetails() {
+    public Orderdetail() {
     }
 
-    public Orderdetails(OrderdetailsPK orderdetailsPK) {
+    public Orderdetail(OrderdetailPK orderdetailsPK) {
         this.orderdetailsPK = orderdetailsPK;
     }
 
-    public Orderdetails(int ordernumber, String productcode) {
-        this.orderdetailsPK = new OrderdetailsPK(ordernumber, productcode);
+    public Orderdetail(int ordernumber, String productcode) {
+        this.orderdetailsPK = new OrderdetailPK(ordernumber, productcode);
     }
 
-    public OrderdetailsPK getOrderdetailsPK() {
+    public OrderdetailPK getOrderdetailsPK() {
         return orderdetailsPK;
     }
 
-    public void setOrderdetailsPK(OrderdetailsPK orderdetailsPK) {
+    public void setOrderdetailsPK(OrderdetailPK orderdetailsPK) {
         this.orderdetailsPK = orderdetailsPK;
     }
 
@@ -90,19 +90,19 @@ public class Orderdetails implements Serializable {
         this.orderlinenumber = orderlinenumber;
     }
 
-    public Products getProducts() {
+    public Product getProducts() {
         return products;
     }
 
-    public void setProducts(Products products) {
+    public void setProducts(Product products) {
         this.products = products;
     }
 
-    public Orders getOrders() {
+    public Order getOrders() {
         return orders;
     }
 
-    public void setOrders(Orders orders) {
+    public void setOrders(Order orders) {
         this.orders = orders;
     }
 
@@ -116,10 +116,10 @@ public class Orderdetails implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Orderdetails)) {
+        if (!(object instanceof Orderdetail)) {
             return false;
         }
-        Orderdetails other = (Orderdetails) object;
+        Orderdetail other = (Orderdetail) object;
         if ((this.orderdetailsPK == null && other.orderdetailsPK != null) || (this.orderdetailsPK != null && !this.orderdetailsPK.equals(other.orderdetailsPK))) {
             return false;
         }

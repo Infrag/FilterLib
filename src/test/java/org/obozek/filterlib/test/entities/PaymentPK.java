@@ -14,7 +14,7 @@ import javax.persistence.Embeddable;
  * @author infragile
  */
 @Embeddable
-public class PaymentsPK implements Serializable {
+public class PaymentPK implements Serializable {
     @Basic(optional = false)
     @Column(name = "CUSTOMERNUMBER", nullable = false)
     private int customernumber;
@@ -22,10 +22,10 @@ public class PaymentsPK implements Serializable {
     @Column(name = "CHECKNUMBER", nullable = false, length = 50)
     private String checknumber;
 
-    public PaymentsPK() {
+    public PaymentPK() {
     }
 
-    public PaymentsPK(int customernumber, String checknumber) {
+    public PaymentPK(int customernumber, String checknumber) {
         this.customernumber = customernumber;
         this.checknumber = checknumber;
     }
@@ -57,10 +57,10 @@ public class PaymentsPK implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof PaymentsPK)) {
+        if (!(object instanceof PaymentPK)) {
             return false;
         }
-        PaymentsPK other = (PaymentsPK) object;
+        PaymentPK other = (PaymentPK) object;
         if (this.customernumber != other.customernumber) {
             return false;
         }

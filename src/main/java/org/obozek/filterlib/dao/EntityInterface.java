@@ -1,4 +1,4 @@
-package org.obozek.filterlib.extension;
+package org.obozek.filterlib.dao;
 
 import java.io.Serializable;
 

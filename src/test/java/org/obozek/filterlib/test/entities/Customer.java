@@ -39,7 +39,7 @@ import javax.persistence.UniqueConstraint;
     @NamedQuery(name = "Customers.findByCountry", query = "SELECT c FROM Customers c WHERE c.country = :country"),
     @NamedQuery(name = "Customers.findBySalesrepemployeenumber", query = "SELECT c FROM Customers c WHERE c.salesrepemployeenumber = :salesrepemployeenumber"),
     @NamedQuery(name = "Customers.findByCreditlimit", query = "SELECT c FROM Customers c WHERE c.creditlimit = :creditlimit")})
-public class Customers implements Serializable {
+public class Customer implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -71,14 +71,14 @@ public class Customers implements Serializable {
     @Column(name = "CREDITLIMIT", precision = 52)
     private Double creditlimit;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "customers")
-    private List<Payments> paymentsList;
+    private List<Payment> paymentsList;
     @OneToMany(mappedBy = "customernumber")
-    private List<Orders> ordersList;
+    private List<Order> ordersList;
 
-    public Customers() {
+    public Customer() {
     }
 
-    public Customers(Integer customernumber) {
+    public Customer(Integer customernumber) {
         this.customernumber = customernumber;
     }
 
@@ -186,19 +186,19 @@ public class Customers implements Serializable {
         this.creditlimit = creditlimit;
     }
 
-    public List<Payments> getPaymentsList() {
+    public List<Payment> getPaymentsList() {
         return paymentsList;
     }
 
-    public void setPaymentsList(List<Payments> paymentsList) {
+    public void setPaymentsList(List<Payment> paymentsList) {
         this.paymentsList = paymentsList;
     }
 
-    public List<Orders> getOrdersList() {
+    public List<Order> getOrdersList() {
         return ordersList;
     }
 
-    public void setOrdersList(List<Orders> ordersList) {
+    public void setOrdersList(List<Order> ordersList) {
         this.ordersList = ordersList;
     }
 
@@ -212,10 +212,10 @@ public class Customers implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Customers)) {
+        if (!(object instanceof Customer)) {
             return false;
         }
-        Customers other = (Customers) object;
+        Customer other = (Customer) object;
         if ((this.customernumber == null && other.customernumber != null) || (this.customernumber != null && !this.customernumber.equals(other.customernumber))) {
             return false;
         }

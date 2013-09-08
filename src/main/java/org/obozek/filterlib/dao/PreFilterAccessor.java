@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.obozek.filterlib.extension;
+package org.obozek.filterlib.dao;
 
 import java.util.List;
 import org.springframework.data.domain.Pageable;

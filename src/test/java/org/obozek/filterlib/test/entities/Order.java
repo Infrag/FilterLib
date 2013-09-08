@@ -37,7 +37,7 @@ import javax.persistence.UniqueConstraint;
     @NamedQuery(name = "Orders.findByRequireddate", query = "SELECT o FROM Orders o WHERE o.requireddate = :requireddate"),
     @NamedQuery(name = "Orders.findByShippeddate", query = "SELECT o FROM Orders o WHERE o.shippeddate = :shippeddate"),
     @NamedQuery(name = "Orders.findByStatus", query = "SELECT o FROM Orders o WHERE o.status = :status")})
-public class Orders implements Serializable {
+public class Order implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -59,14 +59,14 @@ public class Orders implements Serializable {
     private String comments;
     @JoinColumn(name = "CUSTOMERNUMBER", referencedColumnName = "CUSTOMERNUMBER")
     @ManyToOne
-    private Customers customernumber;
+    private Customer customernumber;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "orders")
-    private List<Orderdetails> orderdetailsList;
+    private List<Orderdetail> orderdetailsList;
 
-    public Orders() {
+    public Order() {
     }
 
-    public Orders(Integer ordernumber) {
+    public Order(Integer ordernumber) {
         this.ordernumber = ordernumber;
     }
 
@@ -118,19 +118,19 @@ public class Orders implements Serializable {
         this.comments = comments;
     }
 
-    public Customers getCustomernumber() {
+    public Customer getCustomernumber() {
         return customernumber;
     }
 
-    public void setCustomernumber(Customers customernumber) {
+    public void setCustomernumber(Customer customernumber) {
         this.customernumber = customernumber;
     }
 
-    public List<Orderdetails> getOrderdetailsList() {
+    public List<Orderdetail> getOrderdetailsList() {
         return orderdetailsList;
     }
 
-    public void setOrderdetailsList(List<Orderdetails> orderdetailsList) {
+    public void setOrderdetailsList(List<Orderdetail> orderdetailsList) {
         this.orderdetailsList = orderdetailsList;
     }
 
@@ -144,10 +144,10 @@ public class Orders implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Orders)) {
+        if (!(object instanceof Order)) {
             return false;
         }
-        Orders other = (Orders) object;
+        Order other = (Order) object;
         if ((this.ordernumber == null && other.ordernumber != null) || (this.ordernumber != null && !this.ordernumber.equals(other.ordernumber))) {
             return false;
         }

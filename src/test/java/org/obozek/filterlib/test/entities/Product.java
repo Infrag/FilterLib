@@ -35,7 +35,7 @@ import javax.persistence.UniqueConstraint;
     @NamedQuery(name = "Products.findByQuantityinstock", query = "SELECT p FROM Products p WHERE p.quantityinstock = :quantityinstock"),
     @NamedQuery(name = "Products.findByBuyprice", query = "SELECT p FROM Products p WHERE p.buyprice = :buyprice"),
     @NamedQuery(name = "Products.findByMsrp", query = "SELECT p FROM Products p WHERE p.msrp = :msrp")})
-public class Products implements Serializable {
+public class Product implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -60,12 +60,12 @@ public class Products implements Serializable {
     @Column(name = "MSRP", precision = 52)
     private Double msrp;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "products")
-    private List<Orderdetails> orderdetailsList;
+    private List<Orderdetail> orderdetailsList;
 
-    public Products() {
+    public Product() {
     }
 
-    public Products(String productcode) {
+    public Product(String productcode) {
         this.productcode = productcode;
     }
 
@@ -141,11 +141,11 @@ public class Products implements Serializable {
         this.msrp = msrp;
     }
 
-    public List<Orderdetails> getOrderdetailsList() {
+    public List<Orderdetail> getOrderdetailsList() {
         return orderdetailsList;
     }
 
-    public void setOrderdetailsList(List<Orderdetails> orderdetailsList) {
+    public void setOrderdetailsList(List<Orderdetail> orderdetailsList) {
         this.orderdetailsList = orderdetailsList;
     }
 
@@ -159,10 +159,10 @@ public class Products implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Products)) {
+        if (!(object instanceof Product)) {
             return false;
         }
-        Products other = (Products) object;
+        Product other = (Product) object;
         if ((this.productcode == null && other.productcode != null) || (this.productcode != null && !this.productcode.equals(other.productcode))) {
             return false;
         }

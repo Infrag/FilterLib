@@ -31,7 +31,7 @@ import javax.persistence.UniqueConstraint;
     @NamedQuery(name = "Employees.findByOfficecode", query = "SELECT e FROM Employees e WHERE e.officecode = :officecode"),
     @NamedQuery(name = "Employees.findByReportsto", query = "SELECT e FROM Employees e WHERE e.reportsto = :reportsto"),
     @NamedQuery(name = "Employees.findByJobtitle", query = "SELECT e FROM Employees e WHERE e.jobtitle = :jobtitle")})
-public class Employees implements Serializable {
+public class Employee implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -52,10 +52,10 @@ public class Employees implements Serializable {
     @Column(name = "JOBTITLE", length = 50)
     private String jobtitle;
 
-    public Employees() {
+    public Employee() {
     }
 
-    public Employees(Integer employeenumber) {
+    public Employee(Integer employeenumber) {
         this.employeenumber = employeenumber;
     }
 
@@ -133,10 +133,10 @@ public class Employees implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Employees)) {
+        if (!(object instanceof Employee)) {
             return false;
         }
-        Employees other = (Employees) object;
+        Employee other = (Employee) object;
         if ((this.employeenumber == null && other.employeenumber != null) || (this.employeenumber != null && !this.employeenumber.equals(other.employeenumber))) {
             return false;
         }

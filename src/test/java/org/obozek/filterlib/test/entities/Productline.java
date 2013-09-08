@@ -26,7 +26,7 @@ import javax.persistence.UniqueConstraint;
     @NamedQuery(name = "Productlines.findAll", query = "SELECT p FROM Productlines p"),
     @NamedQuery(name = "Productlines.findByProductline", query = "SELECT p FROM Productlines p WHERE p.productline = :productline"),
     @NamedQuery(name = "Productlines.findByTextdescription", query = "SELECT p FROM Productlines p WHERE p.textdescription = :textdescription")})
-public class Productlines implements Serializable {
+public class Productline implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -41,10 +41,10 @@ public class Productlines implements Serializable {
     @Column(name = "IMAGE")
     private Serializable image;
 
-    public Productlines() {
+    public Productline() {
     }
 
-    public Productlines(String productline) {
+    public Productline(String productline) {
         this.productline = productline;
     }
 
@@ -90,10 +90,10 @@ public class Productlines implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Productlines)) {
+        if (!(object instanceof Productline)) {
             return false;
         }
-        Productlines other = (Productlines) object;
+        Productline other = (Productline) object;
         if ((this.productline == null && other.productline != null) || (this.productline != null && !this.productline.equals(other.productline))) {
             return false;
         }
