@@ -28,28 +28,28 @@ This table has few attributes and also two one-to-many associations to `Payment`
     +---------------------+         +-------------------------------+           +------------------------+
     |       Payment       |         |           Customer            |           |         Order          |
     +---------------------+         +-------------------------------+           +------------------------+
-    |PaymentPK paymentsPK;|         |Integer customernumber;        |           |Integer ordernumber;    |
-    |Date paymentdate;    |0------->|String customername;           |<---------0|Date orderdate;         |
-    |Double amount;       |         |String contactlastname;        |           |Date requireddate;      |
-    |Customer customers;  |         |String contactfirstname;       |           |Date shippeddate;       |
+    |PaymentPK paymentPK; |         |Integer customerNumber;        |           |Integer orderNumber;    |
+    |Date paymentDate;    |0------->|String customerName;           |<---------0|Date orderDate;         |
+    |Double amount;       |         |String contactLastname;        |           |Date requiredDate;      |
+    |Customer customer;   |         |String contactFirstname;       |           |Date shippedDate;       |
     +---------------------+         |String phone;                  |           |String status;          |
-                                    |String addressline1;           |           |String comments;        |
-                                    |String addressline2;           |           |Customer customernumber;|     
+                                    |String addressLine1;           |           |String comments;        |
+                                    |String addressLine2;           |           |Customer customerNumber;|     
                                     |String city;                   |           +------------------------+
                                     |String state;                  |           
-                                    |String postalcode;             |
+                                    |String postalCode;             |
                                     |String country;                |
-                                    |Integer salesrepemployeenumber;|
-                                    |Double creditlimit;            |
-                                    |List<Payment> paymentsList;    |
-                                    |List<Order> ordersList;        |
+                                    |Integer salesrepEmployeeNumber;|
+                                    |Double creditLimit;            |
+                                    |List<Payment> paymentList;     |
+                                    |List<Order> orderList;         |
                                     +-------------------------------+
 
 Corresponding entity classes are located in test directory in package `org.obozek.filterlib.test.entities`.
 
-Lets say we want to query `Customer` entities by `customernumber`. All we need to have is some kind of POJO object 
-which contains field named <i>cutomernumeber</i> of comparable type. All the other fields present in this POJO filter 
+Lets say we want to query `Customer` entities by `customerNumber`. All we need to have is some kind of POJO object 
+which contains field named <i>cutomerNumeber</i> of comparable type. All the other fields present in this POJO filter 
 have to be `null`(or annotated with special annotation more later). Otherwise the they would be also processed 
-by FilterLib. So we can eg use empty `Customer` object with only `customernumber` field filled, or we can create 
+by FilterLib. So we can eg use empty `Customer` object with only `customerNumber` field filled, or we can create 
 special filtering object just for querying our `Customer` entities. Then simply 
 
