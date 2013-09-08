@@ -22,16 +22,16 @@ import javax.persistence.UniqueConstraint;
 @Table(name = "OFFICES", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"OFFICECODE"})})
 @NamedQueries({
-    @NamedQuery(name = "Offices.findAll", query = "SELECT o FROM Offices o"),
-    @NamedQuery(name = "Offices.findByOfficecode", query = "SELECT o FROM Offices o WHERE o.officecode = :officecode"),
-    @NamedQuery(name = "Offices.findByCity", query = "SELECT o FROM Offices o WHERE o.city = :city"),
-    @NamedQuery(name = "Offices.findByPhone", query = "SELECT o FROM Offices o WHERE o.phone = :phone"),
-    @NamedQuery(name = "Offices.findByAddressline1", query = "SELECT o FROM Offices o WHERE o.addressline1 = :addressline1"),
-    @NamedQuery(name = "Offices.findByAddressline2", query = "SELECT o FROM Offices o WHERE o.addressline2 = :addressline2"),
-    @NamedQuery(name = "Offices.findByState", query = "SELECT o FROM Offices o WHERE o.state = :state"),
-    @NamedQuery(name = "Offices.findByCountry", query = "SELECT o FROM Offices o WHERE o.country = :country"),
-    @NamedQuery(name = "Offices.findByPostalcode", query = "SELECT o FROM Offices o WHERE o.postalcode = :postalcode"),
-    @NamedQuery(name = "Offices.findByTerritory", query = "SELECT o FROM Offices o WHERE o.territory = :territory")})
+    @NamedQuery(name = "Office.findAll", query = "SELECT o FROM Office o"),
+    @NamedQuery(name = "Office.findByOfficecode", query = "SELECT o FROM Office o WHERE o.officecode = :officecode"),
+    @NamedQuery(name = "Office.findByCity", query = "SELECT o FROM Office o WHERE o.city = :city"),
+    @NamedQuery(name = "Office.findByPhone", query = "SELECT o FROM Office o WHERE o.phone = :phone"),
+    @NamedQuery(name = "Office.findByAddressline1", query = "SELECT o FROM Office o WHERE o.addressline1 = :addressline1"),
+    @NamedQuery(name = "Office.findByAddressline2", query = "SELECT o FROM Office o WHERE o.addressline2 = :addressline2"),
+    @NamedQuery(name = "Office.findByState", query = "SELECT o FROM Office o WHERE o.state = :state"),
+    @NamedQuery(name = "Office.findByCountry", query = "SELECT o FROM Office o WHERE o.country = :country"),
+    @NamedQuery(name = "Office.findByPostalcode", query = "SELECT o FROM Office o WHERE o.postalcode = :postalcode"),
+    @NamedQuery(name = "Office.findByTerritory", query = "SELECT o FROM Office o WHERE o.territory = :territory")})
 public class Office implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

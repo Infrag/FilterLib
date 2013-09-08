@@ -26,50 +26,59 @@ import javax.persistence.UniqueConstraint;
 @Table(name = "PAYMENTS", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"CUSTOMERNUMBER", "CHECKNUMBER"})})
 @NamedQueries({
-    @NamedQuery(name = "Payments.findAll", query = "SELECT p FROM Payments p"),
-    @NamedQuery(name = "Payments.findByCustomernumber", query = "SELECT p FROM Payments p WHERE p.paymentsPK.customernumber = :customernumber"),
-    @NamedQuery(name = "Payments.findByChecknumber", query = "SELECT p FROM Payments p WHERE p.paymentsPK.checknumber = :checknumber"),
-    @NamedQuery(name = "Payments.findByPaymentdate", query = "SELECT p FROM Payments p WHERE p.paymentdate = :paymentdate"),
-    @NamedQuery(name = "Payments.findByAmount", query = "SELECT p FROM Payments p WHERE p.amount = :amount")})
+    @NamedQuery(name = "Payment.findAll", query = "SELECT p FROM Payment p"),
+    @NamedQuery(name = "Payment.findByCustomernumber", query = "SELECT p FROM Payment p WHERE p.paymentsPK.customernumber = :customernumber"),
+    @NamedQuery(name = "Payment.findByChecknumber", query = "SELECT p FROM Payment p WHERE p.paymentsPK.checknumber = :checknumber"),
+    @NamedQuery(name = "Payment.findByPaymentdate", query = "SELECT p FROM Payment p WHERE p.paymentdate = :paymentdate"),
+    @NamedQuery(name = "Payment.findByAmount", query = "SELECT p FROM Payment p WHERE p.amount = :amount")})
 public class Payment implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @EmbeddedId
-    protected PaymentPK paymentsPK;
+    protected PaymentPK paymentPK;
     @Column(name = "PAYMENTDATE")
     @Temporal(TemporalType.DATE)
-    private Date paymentdate;
+    private Date paymentDate;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "AMOUNT", precision = 52)
     private Double amount;
     @JoinColumn(name = "CUSTOMERNUMBER", referencedColumnName = "CUSTOMERNUMBER", nullable = false, insertable = false, updatable = false)
     @ManyToOne(optional = false)
-    private Customer customers;
+    private Customer customer;
 
     public Payment() {
     }
 
     public Payment(PaymentPK paymentsPK) {
-        this.paymentsPK = paymentsPK;
+        this.paymentPK = paymentsPK;
     }
 
     public Payment(int customernumber, String checknumber) {
-        this.paymentsPK = new PaymentPK(customernumber, checknumber);
+        this.paymentPK = new PaymentPK(customernumber, checknumber);
     }
 
-    public PaymentPK getPaymentsPK() {
-        return paymentsPK;
+    public PaymentPK getPaymentPK() {
+        return paymentPK;
     }
 
-    public void setPaymentsPK(PaymentPK paymentsPK) {
-        this.paymentsPK = paymentsPK;
+    public void setPaymentPK(PaymentPK paymentPK) {
+        this.paymentPK = paymentPK;
     }
 
-    public Date getPaymentdate() {
-        return paymentdate;
+    public Date getPaymentDate() {
+        return paymentDate;
     }
 
-    public void setPaymentdate(Date paymentdate) {
-        this.paymentdate = paymentdate;
+    public void setPaymentDate(Date paymentDate) {
+        this.paymentDate = paymentDate;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public Double getAmount() {
@@ -80,18 +89,10 @@ public class Payment implements Serializable {
         this.amount = amount;
     }
 
-    public Customer getCustomers() {
-        return customers;
-    }
-
-    public void setCustomers(Customer customers) {
-        this.customers = customers;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (paymentsPK != null ? paymentsPK.hashCode() : 0);
+        hash += (paymentPK != null ? paymentPK.hashCode() : 0);
         return hash;
     }
 
@@ -102,7 +103,7 @@ public class Payment implements Serializable {
             return false;
         }
         Payment other = (Payment) object;
-        if ((this.paymentsPK == null && other.paymentsPK != null) || (this.paymentsPK != null && !this.paymentsPK.equals(other.paymentsPK))) {
+        if ((this.paymentPK == null && other.paymentPK != null) || (this.paymentPK != null && !this.paymentPK.equals(other.paymentPK))) {
             return false;
         }
         return true;
@@ -110,7 +111,6 @@ public class Payment implements Serializable {
 
     @Override
     public String toString() {
-        return "org.filter.dao.entities.Payments[ paymentsPK=" + paymentsPK + " ]";
+        return "org.filter.dao.entities.Payments[ paymentsPK=" + paymentPK + " ]";
     }
-    
 }

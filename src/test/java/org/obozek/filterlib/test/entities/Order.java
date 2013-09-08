@@ -31,12 +31,12 @@ import javax.persistence.UniqueConstraint;
 @Table(name = "ORDERS", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"ORDERNUMBER"})})
 @NamedQueries({
-    @NamedQuery(name = "Orders.findAll", query = "SELECT o FROM Orders o"),
-    @NamedQuery(name = "Orders.findByOrdernumber", query = "SELECT o FROM Orders o WHERE o.ordernumber = :ordernumber"),
-    @NamedQuery(name = "Orders.findByOrderdate", query = "SELECT o FROM Orders o WHERE o.orderdate = :orderdate"),
-    @NamedQuery(name = "Orders.findByRequireddate", query = "SELECT o FROM Orders o WHERE o.requireddate = :requireddate"),
-    @NamedQuery(name = "Orders.findByShippeddate", query = "SELECT o FROM Orders o WHERE o.shippeddate = :shippeddate"),
-    @NamedQuery(name = "Orders.findByStatus", query = "SELECT o FROM Orders o WHERE o.status = :status")})
+    @NamedQuery(name = "Order.findAll", query = "SELECT o FROM Order o"),
+    @NamedQuery(name = "Order.findByOrdernumber", query = "SELECT o FROM Order o WHERE o.ordernumber = :ordernumber"),
+    @NamedQuery(name = "Order.findByOrderdate", query = "SELECT o FROM Order o WHERE o.orderdate = :orderdate"),
+    @NamedQuery(name = "Order.findByRequireddate", query = "SELECT o FROM Order o WHERE o.requireddate = :requireddate"),
+    @NamedQuery(name = "Order.findByShippeddate", query = "SELECT o FROM Order o WHERE o.shippeddate = :shippeddate"),
+    @NamedQuery(name = "Order.findByStatus", query = "SELECT o FROM Order o WHERE o.status = :status")})
 public class Order implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -61,7 +61,7 @@ public class Order implements Serializable {
     @ManyToOne
     private Customer customernumber;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "orders")
-    private List<Orderdetail> orderdetailsList;
+    private List<OrderDetail> orderdetailsList;
 
     public Order() {
     }
@@ -126,11 +126,11 @@ public class Order implements Serializable {
         this.customernumber = customernumber;
     }
 
-    public List<Orderdetail> getOrderdetailsList() {
+    public List<OrderDetail> getOrderdetailsList() {
         return orderdetailsList;
     }
 
-    public void setOrderdetailsList(List<Orderdetail> orderdetailsList) {
+    public void setOrderdetailsList(List<OrderDetail> orderdetailsList) {
         this.orderdetailsList = orderdetailsList;
     }
 

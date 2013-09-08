@@ -22,15 +22,15 @@ import javax.persistence.UniqueConstraint;
 @Table(name = "EMPLOYEES", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"EMPLOYEENUMBER"})})
 @NamedQueries({
-    @NamedQuery(name = "Employees.findAll", query = "SELECT e FROM Employees e"),
-    @NamedQuery(name = "Employees.findByEmployeenumber", query = "SELECT e FROM Employees e WHERE e.employeenumber = :employeenumber"),
-    @NamedQuery(name = "Employees.findByLastname", query = "SELECT e FROM Employees e WHERE e.lastname = :lastname"),
-    @NamedQuery(name = "Employees.findByFirstname", query = "SELECT e FROM Employees e WHERE e.firstname = :firstname"),
-    @NamedQuery(name = "Employees.findByExtension", query = "SELECT e FROM Employees e WHERE e.extension = :extension"),
-    @NamedQuery(name = "Employees.findByEmail", query = "SELECT e FROM Employees e WHERE e.email = :email"),
-    @NamedQuery(name = "Employees.findByOfficecode", query = "SELECT e FROM Employees e WHERE e.officecode = :officecode"),
-    @NamedQuery(name = "Employees.findByReportsto", query = "SELECT e FROM Employees e WHERE e.reportsto = :reportsto"),
-    @NamedQuery(name = "Employees.findByJobtitle", query = "SELECT e FROM Employees e WHERE e.jobtitle = :jobtitle")})
+    @NamedQuery(name = "Employee.findAll", query = "SELECT e FROM Employee e"),
+    @NamedQuery(name = "Employee.findByEmployeenumber", query = "SELECT e FROM Employee e WHERE e.employeenumber = :employeenumber"),
+    @NamedQuery(name = "Employee.findByLastname", query = "SELECT e FROM Employee e WHERE e.lastname = :lastname"),
+    @NamedQuery(name = "Employee.findByFirstname", query = "SELECT e FROM Employee e WHERE e.firstname = :firstname"),
+    @NamedQuery(name = "Employee.findByExtension", query = "SELECT e FROM Employee e WHERE e.extension = :extension"),
+    @NamedQuery(name = "Employee.findByEmail", query = "SELECT e FROM Employee e WHERE e.email = :email"),
+    @NamedQuery(name = "Employee.findByOfficecode", query = "SELECT e FROM Employee e WHERE e.officecode = :officecode"),
+    @NamedQuery(name = "Employee.findByReportsto", query = "SELECT e FROM Employee e WHERE e.reportsto = :reportsto"),
+    @NamedQuery(name = "Employee.findByJobtitle", query = "SELECT e FROM Employee e WHERE e.jobtitle = :jobtitle")})
 public class Employee implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

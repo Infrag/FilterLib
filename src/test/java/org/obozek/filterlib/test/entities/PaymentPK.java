@@ -15,42 +15,43 @@ import javax.persistence.Embeddable;
  */
 @Embeddable
 public class PaymentPK implements Serializable {
+
     @Basic(optional = false)
     @Column(name = "CUSTOMERNUMBER", nullable = false)
-    private int customernumber;
+    private int customerNumber;
     @Basic(optional = false)
     @Column(name = "CHECKNUMBER", nullable = false, length = 50)
-    private String checknumber;
+    private String checkNumber;
 
     public PaymentPK() {
     }
 
     public PaymentPK(int customernumber, String checknumber) {
-        this.customernumber = customernumber;
-        this.checknumber = checknumber;
+        this.customerNumber = customernumber;
+        this.checkNumber = checknumber;
     }
 
-    public int getCustomernumber() {
-        return customernumber;
+    public int getCustomerNumber() {
+        return customerNumber;
     }
 
-    public void setCustomernumber(int customernumber) {
-        this.customernumber = customernumber;
+    public void setCustomerNumber(int customerNumber) {
+        this.customerNumber = customerNumber;
     }
 
-    public String getChecknumber() {
-        return checknumber;
+    public String getCheckNumber() {
+        return checkNumber;
     }
 
-    public void setChecknumber(String checknumber) {
-        this.checknumber = checknumber;
+    public void setCheckNumber(String checkNumber) {
+        this.checkNumber = checkNumber;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (int) customernumber;
-        hash += (checknumber != null ? checknumber.hashCode() : 0);
+        hash += (int) customerNumber;
+        hash += (checkNumber != null ? checkNumber.hashCode() : 0);
         return hash;
     }
 
@@ -61,10 +62,10 @@ public class PaymentPK implements Serializable {
             return false;
         }
         PaymentPK other = (PaymentPK) object;
-        if (this.customernumber != other.customernumber) {
+        if (this.customerNumber != other.customerNumber) {
             return false;
         }
-        if ((this.checknumber == null && other.checknumber != null) || (this.checknumber != null && !this.checknumber.equals(other.checknumber))) {
+        if ((this.checkNumber == null && other.checkNumber != null) || (this.checkNumber != null && !this.checkNumber.equals(other.checkNumber))) {
             return false;
         }
         return true;
@@ -72,7 +73,6 @@ public class PaymentPK implements Serializable {
 
     @Override
     public String toString() {
-        return "org.filter.dao.entities.PaymentsPK[ customernumber=" + customernumber + ", checknumber=" + checknumber + " ]";
+        return "org.filter.dao.entities.PaymentsPK[ customernumber=" + customerNumber + ", checknumber=" + checkNumber + " ]";
     }
-    
 }

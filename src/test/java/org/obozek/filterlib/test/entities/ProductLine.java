@@ -26,50 +26,51 @@ import javax.persistence.UniqueConstraint;
     @NamedQuery(name = "Productlines.findAll", query = "SELECT p FROM Productlines p"),
     @NamedQuery(name = "Productlines.findByProductline", query = "SELECT p FROM Productlines p WHERE p.productline = :productline"),
     @NamedQuery(name = "Productlines.findByTextdescription", query = "SELECT p FROM Productlines p WHERE p.textdescription = :textdescription")})
-public class Productline implements Serializable {
+public class ProductLine implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @Column(name = "PRODUCTLINE", nullable = false, length = 50)
-    private String productline;
+    private String productLine;
     @Column(name = "TEXTDESCRIPTION", length = 4000)
-    private String textdescription;
+    private String textDescription;
     @Lob
     @Column(name = "HTMLDESCRIPTION")
-    private String htmldescription;
+    private String htmlDescription;
     @Lob
     @Column(name = "IMAGE")
     private Serializable image;
 
-    public Productline() {
+    public ProductLine() {
     }
 
-    public Productline(String productline) {
-        this.productline = productline;
+    public ProductLine(String productline) {
+        this.productLine = productline;
     }
 
-    public String getProductline() {
-        return productline;
+    public String getProductLine() {
+        return productLine;
     }
 
-    public void setProductline(String productline) {
-        this.productline = productline;
+    public void setProductLine(String productLine) {
+        this.productLine = productLine;
     }
 
-    public String getTextdescription() {
-        return textdescription;
+    public String getTextDescription() {
+        return textDescription;
     }
 
-    public void setTextdescription(String textdescription) {
-        this.textdescription = textdescription;
+    public void setTextDescription(String textDescription) {
+        this.textDescription = textDescription;
     }
 
-    public String getHtmldescription() {
-        return htmldescription;
+    public String getHtmlDescription() {
+        return htmlDescription;
     }
 
-    public void setHtmldescription(String htmldescription) {
-        this.htmldescription = htmldescription;
+    public void setHtmlDescription(String htmlDescription) {
+        this.htmlDescription = htmlDescription;
     }
 
     public Serializable getImage() {
@@ -83,18 +84,18 @@ public class Productline implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (productline != null ? productline.hashCode() : 0);
+        hash += (productLine != null ? productLine.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Productline)) {
+        if (!(object instanceof ProductLine)) {
             return false;
         }
-        Productline other = (Productline) object;
-        if ((this.productline == null && other.productline != null) || (this.productline != null && !this.productline.equals(other.productline))) {
+        ProductLine other = (ProductLine) object;
+        if ((this.productLine == null && other.productLine != null) || (this.productLine != null && !this.productLine.equals(other.productLine))) {
             return false;
         }
         return true;
@@ -102,7 +103,6 @@ public class Productline implements Serializable {
 
     @Override
     public String toString() {
-        return "org.filter.dao.entities.Productlines[ productline=" + productline + " ]";
+        return "org.filter.dao.entities.Productline[ productline=" + productLine + " ]";
     }
-    
 }

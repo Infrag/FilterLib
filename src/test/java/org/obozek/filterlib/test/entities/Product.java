@@ -26,111 +26,120 @@ import javax.persistence.UniqueConstraint;
 @Table(name = "PRODUCTS", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"PRODUCTCODE"})})
 @NamedQueries({
-    @NamedQuery(name = "Products.findAll", query = "SELECT p FROM Products p"),
-    @NamedQuery(name = "Products.findByProductcode", query = "SELECT p FROM Products p WHERE p.productcode = :productcode"),
-    @NamedQuery(name = "Products.findByProductname", query = "SELECT p FROM Products p WHERE p.productname = :productname"),
-    @NamedQuery(name = "Products.findByProductline", query = "SELECT p FROM Products p WHERE p.productline = :productline"),
-    @NamedQuery(name = "Products.findByProductscale", query = "SELECT p FROM Products p WHERE p.productscale = :productscale"),
-    @NamedQuery(name = "Products.findByProductvendor", query = "SELECT p FROM Products p WHERE p.productvendor = :productvendor"),
-    @NamedQuery(name = "Products.findByQuantityinstock", query = "SELECT p FROM Products p WHERE p.quantityinstock = :quantityinstock"),
-    @NamedQuery(name = "Products.findByBuyprice", query = "SELECT p FROM Products p WHERE p.buyprice = :buyprice"),
-    @NamedQuery(name = "Products.findByMsrp", query = "SELECT p FROM Products p WHERE p.msrp = :msrp")})
+    @NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p"),
+    @NamedQuery(name = "Product.findByProductcode", query = "SELECT p FROM Product p WHERE p.productcode = :productcode"),
+    @NamedQuery(name = "Product.findByProductname", query = "SELECT p FROM Product p WHERE p.productname = :productname"),
+    @NamedQuery(name = "Product.findByProductline", query = "SELECT p FROM Product p WHERE p.productline = :productline"),
+    @NamedQuery(name = "Product.findByProductcale", query = "SELECT p FROM Product p WHERE p.productscale = :productscale"),
+    @NamedQuery(name = "Product.findByProductvendor", query = "SELECT p FROM Product p WHERE p.productvendor = :productvendor"),
+    @NamedQuery(name = "Product.findByQuantityinstock", query = "SELECT p FROM Product p WHERE p.quantityinstock = :quantityinstock"),
+    @NamedQuery(name = "Product.findByBuyprice", query = "SELECT p FROM Product p WHERE p.buyprice = :buyprice"),
+    @NamedQuery(name = "Product.findByMsrp", query = "SELECT p FROM Product p WHERE p.msrp = :msrp")})
 public class Product implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @Column(name = "PRODUCTCODE", nullable = false, length = 15)
-    private String productcode;
+    private String code;
     @Column(name = "PRODUCTNAME", length = 70)
-    private String productname;
+    private String name;
     @Column(name = "PRODUCTLINE", length = 50)
-    private String productline;
+    private String productLine;
     @Column(name = "PRODUCTSCALE", length = 10)
-    private String productscale;
+    private String scale;
     @Column(name = "PRODUCTVENDOR", length = 50)
-    private String productvendor;
+    private String vendor;
     @Lob
     @Column(name = "PRODUCTDESCRIPTION", length = 32700)
-    private String productdescription;
+    private String description;
     @Column(name = "QUANTITYINSTOCK")
-    private Integer quantityinstock;
+    private Integer quantityInStock;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "BUYPRICE", precision = 52)
-    private Double buyprice;
+    private Double buyPrice;
     @Column(name = "MSRP", precision = 52)
     private Double msrp;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "products")
-    private List<Orderdetail> orderdetailsList;
+    private List<OrderDetail> orderDetailList;
 
     public Product() {
     }
 
     public Product(String productcode) {
-        this.productcode = productcode;
+        this.code = productcode;
     }
 
-    public String getProductcode() {
-        return productcode;
+    public String getCode() {
+        return code;
     }
 
-    public void setProductcode(String productcode) {
-        this.productcode = productcode;
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public String getProductname() {
-        return productname;
+    public String getName() {
+        return name;
     }
 
-    public void setProductname(String productname) {
-        this.productname = productname;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getProductline() {
-        return productline;
+    public String getProductLine() {
+        return productLine;
     }
 
-    public void setProductline(String productline) {
-        this.productline = productline;
+    public void setProductLine(String productLine) {
+        this.productLine = productLine;
     }
 
-    public String getProductscale() {
-        return productscale;
+    public String getScale() {
+        return scale;
     }
 
-    public void setProductscale(String productscale) {
-        this.productscale = productscale;
+    public void setScale(String scale) {
+        this.scale = scale;
     }
 
-    public String getProductvendor() {
-        return productvendor;
+    public String getVendor() {
+        return vendor;
     }
 
-    public void setProductvendor(String productvendor) {
-        this.productvendor = productvendor;
+    public void setVendor(String vendor) {
+        this.vendor = vendor;
     }
 
-    public String getProductdescription() {
-        return productdescription;
+    public String getDescription() {
+        return description;
     }
 
-    public void setProductdescription(String productdescription) {
-        this.productdescription = productdescription;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public Integer getQuantityinstock() {
-        return quantityinstock;
+    public Integer getQuantityInStock() {
+        return quantityInStock;
     }
 
-    public void setQuantityinstock(Integer quantityinstock) {
-        this.quantityinstock = quantityinstock;
+    public void setQuantityInStock(Integer quantityInStock) {
+        this.quantityInStock = quantityInStock;
     }
 
-    public Double getBuyprice() {
-        return buyprice;
+    public Double getBuyPrice() {
+        return buyPrice;
     }
 
-    public void setBuyprice(Double buyprice) {
-        this.buyprice = buyprice;
+    public void setBuyPrice(Double buyPrice) {
+        this.buyPrice = buyPrice;
+    }
+
+    public List<OrderDetail> getOrderDetailList() {
+        return orderDetailList;
+    }
+
+    public void setOrderDetailList(List<OrderDetail> orderDetailList) {
+        this.orderDetailList = orderDetailList;
     }
 
     public Double getMsrp() {
@@ -141,18 +150,10 @@ public class Product implements Serializable {
         this.msrp = msrp;
     }
 
-    public List<Orderdetail> getOrderdetailsList() {
-        return orderdetailsList;
-    }
-
-    public void setOrderdetailsList(List<Orderdetail> orderdetailsList) {
-        this.orderdetailsList = orderdetailsList;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (productcode != null ? productcode.hashCode() : 0);
+        hash += (code != null ? code.hashCode() : 0);
         return hash;
     }
 
@@ -163,7 +164,7 @@ public class Product implements Serializable {
             return false;
         }
         Product other = (Product) object;
-        if ((this.productcode == null && other.productcode != null) || (this.productcode != null && !this.productcode.equals(other.productcode))) {
+        if ((this.code == null && other.code != null) || (this.code != null && !this.code.equals(other.code))) {
             return false;
         }
         return true;
@@ -171,7 +172,6 @@ public class Product implements Serializable {
 
     @Override
     public String toString() {
-        return "org.filter.dao.entities.Products[ productcode=" + productcode + " ]";
+        return "org.filter.dao.entities.Products[ productcode=" + code + " ]";
     }
-    
 }

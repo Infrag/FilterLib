@@ -25,93 +25,62 @@ import javax.persistence.UniqueConstraint;
 @Table(name = "CUSTOMERS", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"CUSTOMERNUMBER"})})
 @NamedQueries({
-    @NamedQuery(name = "Customers.findAll", query = "SELECT c FROM Customers c"),
-    @NamedQuery(name = "Customers.findByCustomernumber", query = "SELECT c FROM Customers c WHERE c.customernumber = :customernumber"),
-    @NamedQuery(name = "Customers.findByCustomername", query = "SELECT c FROM Customers c WHERE c.customername = :customername"),
-    @NamedQuery(name = "Customers.findByContactlastname", query = "SELECT c FROM Customers c WHERE c.contactlastname = :contactlastname"),
-    @NamedQuery(name = "Customers.findByContactfirstname", query = "SELECT c FROM Customers c WHERE c.contactfirstname = :contactfirstname"),
-    @NamedQuery(name = "Customers.findByPhone", query = "SELECT c FROM Customers c WHERE c.phone = :phone"),
-    @NamedQuery(name = "Customers.findByAddressline1", query = "SELECT c FROM Customers c WHERE c.addressline1 = :addressline1"),
-    @NamedQuery(name = "Customers.findByAddressline2", query = "SELECT c FROM Customers c WHERE c.addressline2 = :addressline2"),
-    @NamedQuery(name = "Customers.findByCity", query = "SELECT c FROM Customers c WHERE c.city = :city"),
-    @NamedQuery(name = "Customers.findByState", query = "SELECT c FROM Customers c WHERE c.state = :state"),
-    @NamedQuery(name = "Customers.findByPostalcode", query = "SELECT c FROM Customers c WHERE c.postalcode = :postalcode"),
-    @NamedQuery(name = "Customers.findByCountry", query = "SELECT c FROM Customers c WHERE c.country = :country"),
-    @NamedQuery(name = "Customers.findBySalesrepemployeenumber", query = "SELECT c FROM Customers c WHERE c.salesrepemployeenumber = :salesrepemployeenumber"),
-    @NamedQuery(name = "Customers.findByCreditlimit", query = "SELECT c FROM Customers c WHERE c.creditlimit = :creditlimit")})
+    @NamedQuery(name = "Customer.findAll", query = "SELECT c FROM Customer c"),
+    @NamedQuery(name = "Customer.findByCustomernumber", query = "SELECT c FROM Customer c WHERE c.customernumber = :customernumber"),
+    @NamedQuery(name = "Customer.findByCustomername", query = "SELECT c FROM Customer c WHERE c.customername = :customername"),
+    @NamedQuery(name = "Customer.findByContactlastname", query = "SELECT c FROM Customer c WHERE c.contactlastname = :contactlastname"),
+    @NamedQuery(name = "Customer.findByContactfirstname", query = "SELECT c FROM Customer c WHERE c.contactfirstname = :contactfirstname"),
+    @NamedQuery(name = "Customer.findByPhone", query = "SELECT c FROM Customer c WHERE c.phone = :phone"),
+    @NamedQuery(name = "Customer.findByAddressline1", query = "SELECT c FROM Customer c WHERE c.addressline1 = :addressline1"),
+    @NamedQuery(name = "Customer.findByAddressline2", query = "SELECT c FROM Customer c WHERE c.addressline2 = :addressline2"),
+    @NamedQuery(name = "Customer.findByCity", query = "SELECT c FROM Customer c WHERE c.city = :city"),
+    @NamedQuery(name = "Customer.findByState", query = "SELECT c FROM Customer c WHERE c.state = :state"),
+    @NamedQuery(name = "Customer.findByPostalcode", query = "SELECT c FROM Customer c WHERE c.postalcode = :postalcode"),
+    @NamedQuery(name = "Customer.findByCountry", query = "SELECT c FROM Customer c WHERE c.country = :country"),
+    @NamedQuery(name = "Customer.findBySalesrepemployeenumber", query = "SELECT c FROM Customer c WHERE c.salesrepemployeenumber = :salesrepemployeenumber"),
+    @NamedQuery(name = "Customer.findByCreditlimit", query = "SELECT c FROM Customer c WHERE c.creditlimit = :creditlimit")})
 public class Customer implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @Column(name = "CUSTOMERNUMBER", nullable = false)
-    private Integer customernumber;
+    private Integer customerNumber;
     @Column(name = "CUSTOMERNAME", length = 50)
-    private String customername;
+    private String customerName;
     @Column(name = "CONTACTLASTNAME", length = 50)
-    private String contactlastname;
+    private String contactLastname;
     @Column(name = "CONTACTFIRSTNAME", length = 50)
-    private String contactfirstname;
+    private String contactFirstname;
     @Column(name = "PHONE", length = 50)
     private String phone;
     @Column(name = "ADDRESSLINE1", length = 50)
-    private String addressline1;
+    private String addressLine1;
     @Column(name = "ADDRESSLINE2", length = 50)
-    private String addressline2;
+    private String addressLine2;
     @Column(name = "CITY", length = 50)
     private String city;
     @Column(name = "STATE", length = 50)
     private String state;
     @Column(name = "POSTALCODE", length = 15)
-    private String postalcode;
+    private String postalCode;
     @Column(name = "COUNTRY", length = 50)
     private String country;
     @Column(name = "SALESREPEMPLOYEENUMBER")
-    private Integer salesrepemployeenumber;
+    private Integer salesRepEmployeeNumber;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "CREDITLIMIT", precision = 52)
-    private Double creditlimit;
+    private Double creditLimit;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "customers")
-    private List<Payment> paymentsList;
+    private List<Payment> paymentList;
     @OneToMany(mappedBy = "customernumber")
-    private List<Order> ordersList;
+    private List<Order> orderList;
 
     public Customer() {
     }
 
     public Customer(Integer customernumber) {
-        this.customernumber = customernumber;
-    }
-
-    public Integer getCustomernumber() {
-        return customernumber;
-    }
-
-    public void setCustomernumber(Integer customernumber) {
-        this.customernumber = customernumber;
-    }
-
-    public String getCustomername() {
-        return customername;
-    }
-
-    public void setCustomername(String customername) {
-        this.customername = customername;
-    }
-
-    public String getContactlastname() {
-        return contactlastname;
-    }
-
-    public void setContactlastname(String contactlastname) {
-        this.contactlastname = contactlastname;
-    }
-
-    public String getContactfirstname() {
-        return contactfirstname;
-    }
-
-    public void setContactfirstname(String contactfirstname) {
-        this.contactfirstname = contactfirstname;
+        this.customerNumber = customernumber;
     }
 
     public String getPhone() {
@@ -120,22 +89,6 @@ public class Customer implements Serializable {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public String getAddressline1() {
-        return addressline1;
-    }
-
-    public void setAddressline1(String addressline1) {
-        this.addressline1 = addressline1;
-    }
-
-    public String getAddressline2() {
-        return addressline2;
-    }
-
-    public void setAddressline2(String addressline2) {
-        this.addressline2 = addressline2;
     }
 
     public String getCity() {
@@ -154,14 +107,6 @@ public class Customer implements Serializable {
         this.state = state;
     }
 
-    public String getPostalcode() {
-        return postalcode;
-    }
-
-    public void setPostalcode(String postalcode) {
-        this.postalcode = postalcode;
-    }
-
     public String getCountry() {
         return country;
     }
@@ -170,42 +115,98 @@ public class Customer implements Serializable {
         this.country = country;
     }
 
-    public Integer getSalesrepemployeenumber() {
-        return salesrepemployeenumber;
+    public Integer getCustomerNumber() {
+        return customerNumber;
     }
 
-    public void setSalesrepemployeenumber(Integer salesrepemployeenumber) {
-        this.salesrepemployeenumber = salesrepemployeenumber;
+    public void setCustomerNumber(Integer customerNumber) {
+        this.customerNumber = customerNumber;
     }
 
-    public Double getCreditlimit() {
-        return creditlimit;
+    public String getCustomerName() {
+        return customerName;
     }
 
-    public void setCreditlimit(Double creditlimit) {
-        this.creditlimit = creditlimit;
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
-    public List<Payment> getPaymentsList() {
-        return paymentsList;
+    public String getContactLastname() {
+        return contactLastname;
     }
 
-    public void setPaymentsList(List<Payment> paymentsList) {
-        this.paymentsList = paymentsList;
+    public void setContactLastname(String contactLastname) {
+        this.contactLastname = contactLastname;
     }
 
-    public List<Order> getOrdersList() {
-        return ordersList;
+    public String getContactFirstname() {
+        return contactFirstname;
     }
 
-    public void setOrdersList(List<Order> ordersList) {
-        this.ordersList = ordersList;
+    public void setContactFirstname(String contactFirstname) {
+        this.contactFirstname = contactFirstname;
+    }
+
+    public String getAddressLine1() {
+        return addressLine1;
+    }
+
+    public void setAddressLine1(String addressLine1) {
+        this.addressLine1 = addressLine1;
+    }
+
+    public String getAddressLine2() {
+        return addressLine2;
+    }
+
+    public void setAddressLine2(String addressLine2) {
+        this.addressLine2 = addressLine2;
+    }
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+
+    public Integer getSalesRepEmployeeNumber() {
+        return salesRepEmployeeNumber;
+    }
+
+    public void setSalesRepEmployeeNumber(Integer salesRepEmployeeNumber) {
+        this.salesRepEmployeeNumber = salesRepEmployeeNumber;
+    }
+
+    public Double getCreditLimit() {
+        return creditLimit;
+    }
+
+    public void setCreditLimit(Double creditLimit) {
+        this.creditLimit = creditLimit;
+    }
+
+    public List<Payment> getPaymentList() {
+        return paymentList;
+    }
+
+    public void setPaymentList(List<Payment> paymentList) {
+        this.paymentList = paymentList;
+    }
+
+    public List<Order> getOrderList() {
+        return orderList;
+    }
+
+    public void setOrderList(List<Order> orderList) {
+        this.orderList = orderList;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (customernumber != null ? customernumber.hashCode() : 0);
+        hash += (customerNumber != null ? customerNumber.hashCode() : 0);
         return hash;
     }
 
@@ -216,7 +217,7 @@ public class Customer implements Serializable {
             return false;
         }
         Customer other = (Customer) object;
-        if ((this.customernumber == null && other.customernumber != null) || (this.customernumber != null && !this.customernumber.equals(other.customernumber))) {
+        if ((this.customerNumber == null && other.customerNumber != null) || (this.customerNumber != null && !this.customerNumber.equals(other.customerNumber))) {
             return false;
         }
         return true;
@@ -224,7 +225,6 @@ public class Customer implements Serializable {
 
     @Override
     public String toString() {
-        return "org.filter.dao.entities.Customers[ customernumber=" + customernumber + " ]";
+        return "org.filter.dao.entities.Customers[ customernumber=" + customerNumber + " ]";
     }
-    
 }
