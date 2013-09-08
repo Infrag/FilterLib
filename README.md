@@ -7,7 +7,7 @@ About
 -----
 
 This library provides different somewhat more declarative approach for querying database data. 
-Simple **Pojos** serves as basic query objects. These pojos are then parsed by this library and field values together with
+Simple **POJOs** serves as basic query objects. These pojos are then parsed by this library and field values together with
 optional annotations are used to construct DB queries using JPA Criteria API. This apporach can be seen as filtering 
 database tables using prearanged filters. 
 (Later should be provided also way for projections and construction of new objects from these results). It's also similar 
