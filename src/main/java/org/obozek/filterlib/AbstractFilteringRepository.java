@@ -166,7 +166,7 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
                         Filter filtr = field.getType().getAnnotation(Filter.class);
                         if (filtr != null) {
                             if (fh.getFieldValue() != null) {
-                                fields.addAll(AbstractFilteringRepository.getInheritedPrivateFields(fh.getValue(), field));
+                                fields.addAll(AbstractFilteringRepository.getInheritedPrivateFields(fh.getFieldValue(), field));
                             }
                         } else {
 
