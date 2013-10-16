@@ -18,6 +18,7 @@ public class ProcessorContextImpl<P> extends FilterContextImpl<P> implements Pro
     private List<Predicate> orPredicates;
     private List<Predicate> andPredicates;
     private Field field;
+    private Field parentField;
     private StructuredPath path = null;
 
     ProcessorContextImpl(List<Predicate> andPredicates, List<Predicate> orPredicates,
@@ -28,6 +29,14 @@ public class ProcessorContextImpl<P> extends FilterContextImpl<P> implements Pro
         this.field = field;
         this.andPredicates = andPredicates;
         this.orPredicates = orPredicates;
+    }
+
+    ProcessorContextImpl(List<Predicate> andPredicates, List<Predicate> orPredicates,
+            Root<P> entity, Field field, CriteriaQuery<P> query,
+            EntityManager entityManager, Object criteria, Field parentField)
+    {
+        this(andPredicates, orPredicates, entity, field, query, entityManager, criteria);
+        this.parentField = parentField;
     }
 
     protected void preparePath()

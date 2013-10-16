@@ -31,6 +31,11 @@ public class FilterContextImpl<T> implements FilterContext<T>
         return new ProcessorContextImpl<T>(andPredicates, orPredicates, entity, field, query, entityManager, criteria);
     }
 
+    ProcessorContext<T> getProcessorContext(List<Predicate> andPredicates, List<Predicate> orPredicates, Field field, Field parentField)
+    {
+        return new ProcessorContextImpl<T>(andPredicates, orPredicates, entity, field, query, entityManager, criteria, parentField);
+    }
+
     @Override
     public Root<T> getEntityRoot()
     {

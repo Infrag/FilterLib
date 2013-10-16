@@ -153,7 +153,7 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
                 FilterContextImpl<T> filterContext = new FilterContextImpl<T>(entity, criteriaQuery, getEm(), queryCriteria);
                 hints.addAll(filterContext.getHints());
 
-                Queue<FieldHolder> fields = new LinkedList<FieldHolder>(AbstractFilteringRepository.getInheritedPrivateFields(queryCriteria.getClass()));
+                Queue<FieldHolder> fields = new LinkedList<FieldHolder>(AbstractFilteringRepository.getInheritedPrivateFields(queryCriteria, null));
                 while (!fields.isEmpty()) {
                     FieldHolder fh = fields.poll();
                     Field field = fh.getField();
@@ -165,7 +165,7 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
 
                         Filter filtr = field.getType().getAnnotation(Filter.class);
                         if (filtr != null) {
-                            fields.addAll(AbstractFilteringRepository.getInheritedPrivateFields(queryCriteria.getClass()));
+                            fields.addAll(AbstractFilteringRepository.getInheritedPrivateFields(fh.getValue(), field));
                         } else {
 
                             /**
@@ -185,8 +185,12 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
                             if (processor == null) {
                                 processor = getMetaAnnotation(CustomProcessor.class, field);
                             }
-
-                            ProcessorContext<T> processorContext = filterContext.getProcessorContext(andPredicates, orPredicates, field);
+                            ProcessorContext<T> processorContext;
+                            if (fh.getParentField() != null) {
+                                processorContext = filterContext.getProcessorContext(andPredicates, orPredicates, field, fh.getParentField());
+                            } else {
+                                processorContext = filterContext.getProcessorContext(andPredicates, orPredicates, field);
+                            }
                             Object filterFieldValue = fh.getFieldValue();
                             if (processor == null && f != null) {
                                 processTypes(filterFieldValue, processorContext);
@@ -378,7 +382,7 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
      * @param type
      * @return
      */
-    private static List<FieldHolder> getInheritedPrivateFields(Object object)
+    private static List<FieldHolder> getInheritedPrivateFields(Object object, Field parentField)
     {
         List<FieldHolder> result = new ArrayList<FieldHolder>();
 
@@ -386,7 +390,7 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
         while (i != null && i != Object.class) {
             for (Field field : i.getDeclaredFields()) {
                 if (!field.isSynthetic()) {
-                    result.add(new FieldHolder(field, object));
+                    result.add(new FieldHolder(field, object, parentField));
                 }
             }
             i = i.getSuperclass();
@@ -398,6 +402,7 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
     private static class FieldHolder
     {
 
+        private Field parentField;
         private Field field;
         private Object value;
 
@@ -405,6 +410,12 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
         {
             this.field = field;
             this.value = value;
+        }
+
+        public FieldHolder(Field field, Object value, Field parentField)
+        {
+            this(field, value);
+            this.parentField = parentField;
         }
 
         /**
@@ -435,6 +446,11 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
         public Object getValue()
         {
             return value;
+        }
+
+        public Field getParentField()
+        {
+            return parentField;
         }
     }
 
