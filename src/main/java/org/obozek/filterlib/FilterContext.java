@@ -23,6 +23,4 @@ public interface FilterContext<T>
     public CriteriaBuilder getCriteriaBuilder();
 
     public List<Hint> getHints();
-
-    public Boolean isDisjunct();
 }

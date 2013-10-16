@@ -11,7 +11,8 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ProcessorContextImpl<P> extends FilterContextImpl<P> implements ProcessorContext<P> {
+public class ProcessorContextImpl<P> extends FilterContextImpl<P> implements ProcessorContext<P>
+{
 
     private static final Logger LOG = LoggerFactory.getLogger(ProcessorContextImpl.class);
     private List<Predicate> orPredicates;
@@ -21,14 +22,16 @@ public class ProcessorContextImpl<P> extends FilterContextImpl<P> implements Pro
 
     ProcessorContextImpl(List<Predicate> andPredicates, List<Predicate> orPredicates,
             Root<P> entity, Field field, CriteriaQuery<P> query,
-            EntityManager entityManager, Object criteria) {
+            EntityManager entityManager, Object criteria)
+    {
         super(entity, query, entityManager, criteria);
         this.field = field;
         this.andPredicates = andPredicates;
         this.orPredicates = orPredicates;
     }
 
-    protected void preparePath() {
+    protected void preparePath()
+    {
         FieldPath fieldPathAnnotation = field.getAnnotation(FieldPath.class);
         if (fieldPathAnnotation != null && StringUtils.isNotBlank(fieldPathAnnotation.value())) {
             path = StructuredPathFactory.navigate(fieldPathAnnotation.value(), FieldPath.FIELD_PATH_SEPARATOR, getEntityRoot());
@@ -38,12 +41,14 @@ public class ProcessorContextImpl<P> extends FilterContextImpl<P> implements Pro
     }
 
     @Override
-    public Field getField() {
+    public Field getField()
+    {
         return field;
     }
 
     @Override
-    public StructuredPath getStructuredPath() {
+    public StructuredPath getStructuredPath()
+    {
         if (path == null) {
             preparePath();
         }
@@ -51,12 +56,14 @@ public class ProcessorContextImpl<P> extends FilterContextImpl<P> implements Pro
     }
 
     @Override
-    public Path getPath() {
+    public Path getPath()
+    {
         return getStructuredPath().getPath();
     }
 
     @Override
-    public Boolean isNegated() {
+    public Boolean isNegated()
+    {
         return field.getAnnotation(Not.class) != null;
     }
 
@@ -69,11 +76,12 @@ public class ProcessorContextImpl<P> extends FilterContextImpl<P> implements Pro
      * @return
      */
     @Override
-    public Predicate addPredicate(Predicate predicate) {
+    public Predicate addPredicate(Predicate predicate)
+    {
         if (isNegated()) {
             predicate = predicate.not();
         }
-        if (isDisjunct() || field.getAnnotation(Or.class) != null) {
+        if (isDisjunct(field)) {
             orPredicates.add(predicate);
         } else {
             andPredicates.add(predicate);
@@ -82,12 +90,21 @@ public class ProcessorContextImpl<P> extends FilterContextImpl<P> implements Pro
     }
 
     @Override
-    public List<Predicate> getOrPredicates() {
+    public Boolean isDisjunct(Field field)
+    {
+        return field.getAnnotation(Or.class) != null
+                || field.getDeclaringClass().getAnnotation(Or.class) != null;
+    }
+
+    @Override
+    public List<Predicate> getOrPredicates()
+    {
         return orPredicates;
     }
 
     @Override
-    public List<Predicate> getAndPredicates() {
+    public List<Predicate> getAndPredicates()
+    {
         return andPredicates;
     }
 }

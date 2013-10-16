@@ -8,7 +8,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import org.springframework.data.domain.Pageable;
 
 public class FilterContextImpl<T> implements FilterContext<T>
 {
@@ -32,36 +31,36 @@ public class FilterContextImpl<T> implements FilterContext<T>
         return new ProcessorContextImpl<T>(andPredicates, orPredicates, entity, field, query, entityManager, criteria);
     }
 
+    @Override
     public Root<T> getEntityRoot()
     {
         return entity;
     }
 
+    @Override
     public CriteriaQuery<T> getCriteriaQuery()
     {
         return query;
     }
 
+    @Override
     public EntityManager getEntityManager()
     {
         return entityManager;
     }
 
+    @Override
     public CriteriaBuilder getCriteriaBuilder()
     {
         return entityManager.getCriteriaBuilder();
     }
 
+    @Override
     public List<Hint> getHints()
     {
         if (hints == null) {
             hints = new ArrayList<Hint>();
         }
         return hints;
-    }
-
-    public Boolean isDisjunct()
-    {
-        return criteria.getClass().getAnnotation(Or.class) != null;
     }
 }

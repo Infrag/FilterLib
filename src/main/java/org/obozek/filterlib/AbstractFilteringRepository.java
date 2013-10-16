@@ -7,8 +7,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -151,55 +153,63 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
                 FilterContextImpl<T> filterContext = new FilterContextImpl<T>(entity, criteriaQuery, getEm(), queryCriteria);
                 hints.addAll(filterContext.getHints());
 
-                List<Field> fields = AbstractFilteringRepository.getInheritedPrivateFields(queryCriteria.getClass());
-                for (Field field : fields) {
+                Queue<FieldHolder> fields = new LinkedList<FieldHolder>(AbstractFilteringRepository.getInheritedPrivateFields(queryCriteria.getClass()));
+                while (!fields.isEmpty()) {
+                    FieldHolder fh = fields.poll();
+                    Field field = fh.getField();
                     // I want to skip static fields and fields which are cared of in different(specific way)
                     if (!Modifier.isStatic(field.getModifiers()) && !ignoredFields.contains(field.getName())) {
                         if (!field.isAccessible()) {
                             field.setAccessible(true);
                         }
 
-                        /**
-                         * Determine field path
-                         */
-                        // anottaion specified path has always highest priority, so is processed in the first place processing
-                        FieldPath fieldPathAnnotation = field.getAnnotation(FieldPath.class);
-                        Field f;
-                        if (fieldPathAnnotation != null && StringUtils.isNotBlank(fieldPathAnnotation.value())) {
-                            f = FieldUtils.getField(T, StringUtils.substringBefore(fieldPathAnnotation.value(), FieldPath.FIELD_PATH_SEPARATOR), true);
+                        Filter filtr = field.getType().getAnnotation(Filter.class);
+                        if (filtr != null) {
+                            fields.addAll(AbstractFilteringRepository.getInheritedPrivateFields(queryCriteria.getClass()));
                         } else {
-                            f = FieldUtils.getField(T, StringUtils.substringBefore(field.getName(), StructuredPathFactory.FILTER_PATH_SEPARATOR), true);
-                        }
 
-                        // tries to find CustmoProcessor annotation or some annotation metaannotated by custom processor
-                        CustomProcessor processor = field.getAnnotation(CustomProcessor.class);
-                        if (processor == null) {
-                            processor = getMetaAnnotation(CustomProcessor.class, field);
-                        }
-
-                        ProcessorContext<T> processorContext = filterContext.getProcessorContext(andPredicates, orPredicates, field);
-                        Object filterFieldValue = getFilterFieldValue(field, queryCriteria);
-                        if (processor == null && f != null) {
-                            processTypes(filterFieldValue, processorContext);
-                            // If field is not pressent in Entity, it needs special care
-                        } else {
-                            Class<CustomFieldProcessor<T, ?>> processorClass = null;
-                            if (processor != null) {
-                                processorClass = (Class<CustomFieldProcessor<T, ?>>) processor.value();
-                                processCustomFields(filterFieldValue, processorContext, processorClass);
+                            /**
+                             * Determine field path
+                             */
+                            // anottaion specified path has always highest priority, so is processed in the first place processing
+                            FieldPath fieldPathAnnotation = field.getAnnotation(FieldPath.class);
+                            Field f;
+                            if (fieldPathAnnotation != null && StringUtils.isNotBlank(fieldPathAnnotation.value())) {
+                                f = FieldUtils.getField(T, StringUtils.substringBefore(fieldPathAnnotation.value(), FieldPath.FIELD_PATH_SEPARATOR), true);
                             } else {
-                                if (!processCustomTypes(filterFieldValue, processorContext)) {
-                                    if (shouldCheck(processorContext.getField())) {
-                                        LOG.info("Field \'" + processorContext.getField().getName() + "\' from "
-                                                + processorContext.getField().getDeclaringClass().getSimpleName()
-                                                + " wasn't handled. ");
-                                        throw new UnsupportedOperationException("Custom filter fields not supported in "
-                                                + processorContext.getField().getDeclaringClass().getSimpleName()
-                                                + ", required field: " + processorContext.getField().getName());
-                                    } else {
-                                        LOG.info("Field \'" + processorContext.getField().getName() + "\' from "
-                                                + processorContext.getField().getDeclaringClass().getSimpleName()
-                                                + " marked with @Unchecked annotation wasn't handled. ");
+                                f = FieldUtils.getField(T, StringUtils.substringBefore(field.getName(), StructuredPathFactory.FILTER_PATH_SEPARATOR), true);
+                            }
+
+                            // tries to find CustmoProcessor annotation or some annotation metaannotated by custom processor
+                            CustomProcessor processor = field.getAnnotation(CustomProcessor.class);
+                            if (processor == null) {
+                                processor = getMetaAnnotation(CustomProcessor.class, field);
+                            }
+
+                            ProcessorContext<T> processorContext = filterContext.getProcessorContext(andPredicates, orPredicates, field);
+                            Object filterFieldValue = fh.getFieldValue();
+                            if (processor == null && f != null) {
+                                processTypes(filterFieldValue, processorContext);
+                                // If field is not pressent in Entity, it needs special care
+                            } else {
+                                Class<CustomFieldProcessor<T, ?>> processorClass = null;
+                                if (processor != null) {
+                                    processorClass = (Class<CustomFieldProcessor<T, ?>>) processor.value();
+                                    processCustomFields(filterFieldValue, processorContext, processorClass);
+                                } else {
+                                    if (!processCustomTypes(filterFieldValue, processorContext)) {
+                                        if (shouldCheck(processorContext.getField())) {
+                                            LOG.info("Field \'" + processorContext.getField().getName() + "\' from "
+                                                    + processorContext.getField().getDeclaringClass().getSimpleName()
+                                                    + " wasn't handled. ");
+                                            throw new UnsupportedOperationException("Custom filter fields not supported in "
+                                                    + processorContext.getField().getDeclaringClass().getSimpleName()
+                                                    + ", required field: " + processorContext.getField().getName());
+                                        } else {
+                                            LOG.info("Field \'" + processorContext.getField().getName() + "\' from "
+                                                    + processorContext.getField().getDeclaringClass().getSimpleName()
+                                                    + " marked with @Unchecked annotation wasn't handled. ");
+                                        }
                                     }
                                 }
                             }
@@ -343,26 +353,6 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
 //        preFilters.remove(entityClass);
 //    }
     /**
-     * Retrieve field value from object (usually Filter)
-     *
-     * @param field
-     * @param filter
-     * @return
-     */
-    private Object getFilterFieldValue(Field field, Object filter)
-    {
-        Object filterFieldValue = null;
-        try {
-            filterFieldValue = field.get(filter);
-        } catch (IllegalAccessException exception) {
-            throw new FieldAccessException(field, filter, exception);
-        } catch (IllegalArgumentException exception) {
-            throw new FieldAccessException(field, filter, exception);
-        }
-        return filterFieldValue;
-    }
-
-    /**
      * Method finds field with specified annotation in provided class
      *
      * @param clazz
@@ -388,21 +378,64 @@ public abstract class AbstractFilteringRepository<T, U extends Pageable> impleme
      * @param type
      * @return
      */
-    public static List<Field> getInheritedPrivateFields(Class<?> type)
+    private static List<FieldHolder> getInheritedPrivateFields(Object object)
     {
-        List<Field> result = new ArrayList<Field>();
+        List<FieldHolder> result = new ArrayList<FieldHolder>();
 
-        Class<?> i = type;
+        Class<?> i = object.getClass();
         while (i != null && i != Object.class) {
             for (Field field : i.getDeclaredFields()) {
                 if (!field.isSynthetic()) {
-                    result.add(field);
+                    result.add(new FieldHolder(field, object));
                 }
             }
             i = i.getSuperclass();
         }
 
         return result;
+    }
+
+    private static class FieldHolder
+    {
+
+        private Field field;
+        private Object value;
+
+        public FieldHolder(Field field, Object value)
+        {
+            this.field = field;
+            this.value = value;
+        }
+
+        /**
+         * Retrieve field value from object (usually Filter)
+         *
+         * @param field
+         * @param filter
+         * @return
+         */
+        public Object getFieldValue()
+        {
+            Object filterFieldValue = null;
+            try {
+                filterFieldValue = field.get(value);
+            } catch (IllegalAccessException exception) {
+                throw new FieldAccessException(field, value, exception);
+            } catch (IllegalArgumentException exception) {
+                throw new FieldAccessException(field, value, exception);
+            }
+            return filterFieldValue;
+        }
+
+        public Field getField()
+        {
+            return field;
+        }
+
+        public Object getValue()
+        {
+            return value;
+        }
     }
 
     /**
