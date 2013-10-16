@@ -60,7 +60,7 @@ public class Order implements Serializable {
     @JoinColumn(name = "CUSTOMERNUMBER", referencedColumnName = "CUSTOMERNUMBER")
     @ManyToOne
     private Customer customernumber;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "orders")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
     private List<OrderDetail> orderdetailsList;
 
     public Order() {

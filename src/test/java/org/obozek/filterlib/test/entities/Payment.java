@@ -27,9 +27,9 @@ import javax.persistence.UniqueConstraint;
     @UniqueConstraint(columnNames = {"CUSTOMERNUMBER", "CHECKNUMBER"})})
 @NamedQueries({
     @NamedQuery(name = "Payment.findAll", query = "SELECT p FROM Payment p"),
-    @NamedQuery(name = "Payment.findByCustomernumber", query = "SELECT p FROM Payment p WHERE p.paymentsPK.customernumber = :customernumber"),
-    @NamedQuery(name = "Payment.findByChecknumber", query = "SELECT p FROM Payment p WHERE p.paymentsPK.checknumber = :checknumber"),
-    @NamedQuery(name = "Payment.findByPaymentdate", query = "SELECT p FROM Payment p WHERE p.paymentdate = :paymentdate"),
+    @NamedQuery(name = "Payment.findByCustomernumber", query = "SELECT p FROM Payment p WHERE p.paymentPK.customerNumber = :customerNumber"),
+    @NamedQuery(name = "Payment.findByChecknumber", query = "SELECT p FROM Payment p WHERE p.paymentPK.checkNumber = :checkNumber"),
+    @NamedQuery(name = "Payment.findByPaymentdate", query = "SELECT p FROM Payment p WHERE p.paymentDate = :paymentDate"),
     @NamedQuery(name = "Payment.findByAmount", query = "SELECT p FROM Payment p WHERE p.amount = :amount")})
 public class Payment implements Serializable {
 

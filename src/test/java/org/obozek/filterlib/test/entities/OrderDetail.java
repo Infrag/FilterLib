@@ -24,23 +24,24 @@ import javax.persistence.UniqueConstraint;
     @UniqueConstraint(columnNames = {"ORDERNUMBER", "PRODUCTCODE"})})
 @NamedQueries({
     @NamedQuery(name = "OrderDetail.findAll", query = "SELECT o FROM OrderDetail o"),
-    @NamedQuery(name = "OrderDetail.findByOrdernumber", query = "SELECT o FROM OrderDetail o WHERE o.orderdetailsPK.ordernumber = :ordernumber"),
-    @NamedQuery(name = "OrderDetail.findByProductcode", query = "SELECT o FROM OrderDetail o WHERE o.orderdetailsPK.productcode = :productcode"),
-    @NamedQuery(name = "OrderDetail.findByQuantityordered", query = "SELECT o FROM OrderDetail o WHERE o.quantityordered = :quantityordered"),
-    @NamedQuery(name = "OrderDetail.findByPriceeach", query = "SELECT o FROM OrderDetail o WHERE o.priceeach = :priceeach"),
-    @NamedQuery(name = "OrderDetail.findByOrderlinenumber", query = "SELECT o FROM OrderDetail o WHERE o.orderlinenumber = :orderlinenumber")})
-public class OrderDetail implements Serializable {
+    @NamedQuery(name = "OrderDetail.findByOrdernumber", query = "SELECT o FROM OrderDetail o WHERE o.orderDetailPK.orderNumber = :orderNumber"),
+    @NamedQuery(name = "OrderDetail.findByProductcode", query = "SELECT o FROM OrderDetail o WHERE o.orderDetailPK.productCode = :produtCode"),
+    @NamedQuery(name = "OrderDetail.findByQuantityordered", query = "SELECT o FROM OrderDetail o WHERE o.quantityOrdered = :quantityordered"),
+    @NamedQuery(name = "OrderDetail.findByPriceeach", query = "SELECT o FROM OrderDetail o WHERE o.priceEach = :priceEach"),
+    @NamedQuery(name = "OrderDetail.findByOrderlinenumber", query = "SELECT o FROM OrderDetail o WHERE o.orderlineNumber = :orderlinenumber")})
+public class OrderDetail implements Serializable
+{
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
-    protected OrderDetailPK orderDetailsPK;
+    protected OrderDetailPK orderDetailPK;
     @Column(name = "QUANTITYORDERED")
     private Integer quantityOrdered;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "PRICEEACH", precision = 52)
     private Double priceEach;
     @Column(name = "ORDERLINENUMBER")
-    private Short orderlinenumber;
+    private Short orderlineNumber;
     @JoinColumn(name = "PRODUCTCODE", referencedColumnName = "PRODUCTCODE", nullable = false, insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Product product;
@@ -48,87 +49,105 @@ public class OrderDetail implements Serializable {
     @ManyToOne(optional = false)
     private Order order;
 
-    public OrderDetail() {
+    public OrderDetail()
+    {
     }
 
-    public OrderDetail(OrderDetailPK orderdetailsPK) {
-        this.orderDetailsPK = orderdetailsPK;
+    public OrderDetail(OrderDetailPK orderdetailsPK)
+    {
+        this.orderDetailPK = orderdetailsPK;
     }
 
-    public OrderDetail(int ordernumber, String productcode) {
-        this.orderDetailsPK = new OrderDetailPK(ordernumber, productcode);
+    public OrderDetail(int ordernumber, String productcode)
+    {
+        this.orderDetailPK = new OrderDetailPK(ordernumber, productcode);
     }
 
-    public OrderDetailPK getOrderDetailsPK() {
-        return orderDetailsPK;
+    public OrderDetailPK getOrderDetailPK()
+    {
+        return orderDetailPK;
     }
 
-    public void setOrderDetailsPK(OrderDetailPK orderDetailsPK) {
-        this.orderDetailsPK = orderDetailsPK;
+    public void setOrderDetailPK(OrderDetailPK orderDetailPK)
+    {
+        this.orderDetailPK = orderDetailPK;
     }
 
-    public Integer getQuantityOrdered() {
+    public Integer getQuantityOrdered()
+    {
         return quantityOrdered;
     }
 
-    public void setQuantityOrdered(Integer quantityOrdered) {
+    public void setQuantityOrdered(Integer quantityOrdered)
+    {
         this.quantityOrdered = quantityOrdered;
     }
 
-    public Double getPriceEach() {
+    public Double getPriceEach()
+    {
         return priceEach;
     }
 
-    public void setPriceEach(Double priceEach) {
+    public void setPriceEach(Double priceEach)
+    {
         this.priceEach = priceEach;
     }
 
-    public Short getOrderlinenumber() {
-        return orderlinenumber;
+    public Short getOrderlineNumber()
+    {
+        return orderlineNumber;
     }
 
-    public void setOrderlinenumber(Short orderlinenumber) {
-        this.orderlinenumber = orderlinenumber;
+    public void setOrderlineNumber(Short orderlineNumber)
+    {
+        this.orderlineNumber = orderlineNumber;
     }
 
-    public Product getProduct() {
+    public Product getProduct()
+    {
         return product;
     }
 
-    public void setProduct(Product product) {
+    public void setProduct(Product product)
+    {
         this.product = product;
     }
 
-    public Order getOrder() {
+    public Order getOrder()
+    {
         return order;
     }
 
-    public void setOrder(Order order) {
+    public void setOrder(Order order)
+    {
         this.order = order;
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         int hash = 0;
-        hash += (orderDetailsPK != null ? orderDetailsPK.hashCode() : 0);
+        hash += (orderDetailPK != null ? orderDetailPK.hashCode() : 0);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
+    public boolean equals(Object object)
+    {
         // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof OrderDetail)) {
             return false;
         }
         OrderDetail other = (OrderDetail) object;
-        if ((this.orderDetailsPK == null && other.orderDetailsPK != null) || (this.orderDetailsPK != null && !this.orderDetailsPK.equals(other.orderDetailsPK))) {
+        if ((this.orderDetailPK == null && other.orderDetailPK != null) || (this.orderDetailPK != null && !this.orderDetailPK.equals(other.orderDetailPK))) {
             return false;
         }
         return true;
     }
 
     @Override
-    public String toString() {
-        return "org.filter.dao.entities.Orderdetails[ orderDetailsPK=" + orderDetailsPK + " ]";
+    public String toString()
+    {
+        return "org.filter.dao.entities.Orderdetails[ orderDetailsPK=" + orderDetailPK + " ]";
     }
 }

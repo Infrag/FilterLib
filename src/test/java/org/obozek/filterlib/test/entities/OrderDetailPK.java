@@ -14,65 +14,75 @@ import javax.persistence.Embeddable;
  * @author infragile
  */
 @Embeddable
-public class OrderDetailPK implements Serializable {
+public class OrderDetailPK implements Serializable
+{
+
     @Basic(optional = false)
     @Column(name = "ORDERNUMBER", nullable = false)
-    private int ordernumber;
+    private int orderNumber;
     @Basic(optional = false)
     @Column(name = "PRODUCTCODE", nullable = false, length = 15)
-    private String productcode;
+    private String productCode;
 
-    public OrderDetailPK() {
+    public OrderDetailPK()
+    {
     }
 
-    public OrderDetailPK(int ordernumber, String productcode) {
-        this.ordernumber = ordernumber;
-        this.productcode = productcode;
+    public OrderDetailPK(int ordernumber, String productCode)
+    {
+        this.orderNumber = orderNumber;
+        this.productCode = productCode;
     }
 
-    public int getOrdernumber() {
-        return ordernumber;
+    public int getOrderNumber()
+    {
+        return orderNumber;
     }
 
-    public void setOrdernumber(int ordernumber) {
-        this.ordernumber = ordernumber;
+    public void setOrderNumber(int orderNumber)
+    {
+        this.orderNumber = orderNumber;
     }
 
-    public String getProductcode() {
-        return productcode;
+    public String getProductCode()
+    {
+        return productCode;
     }
 
-    public void setProductcode(String productcode) {
-        this.productcode = productcode;
+    public void setProductCode(String productCode)
+    {
+        this.productCode = productCode;
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         int hash = 0;
-        hash += (int) ordernumber;
-        hash += (productcode != null ? productcode.hashCode() : 0);
+        hash += (int) orderNumber;
+        hash += (productCode != null ? productCode.hashCode() : 0);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
+    public boolean equals(Object object)
+    {
         // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof OrderDetailPK)) {
             return false;
         }
         OrderDetailPK other = (OrderDetailPK) object;
-        if (this.ordernumber != other.ordernumber) {
+        if (this.orderNumber != other.orderNumber) {
             return false;
         }
-        if ((this.productcode == null && other.productcode != null) || (this.productcode != null && !this.productcode.equals(other.productcode))) {
+        if ((this.productCode == null && other.productCode != null) || (this.productCode != null && !this.productCode.equals(other.productCode))) {
             return false;
         }
         return true;
     }
 
     @Override
-    public String toString() {
-        return "org.filter.dao.entities.OrderdetailsPK[ ordernumber=" + ordernumber + ", productcode=" + productcode + " ]";
+    public String toString()
+    {
+        return "org.filter.dao.entities.OrderdetailsPK[ ordernumber=" + orderNumber + ", productcode=" + productCode + " ]";
     }
-    
 }

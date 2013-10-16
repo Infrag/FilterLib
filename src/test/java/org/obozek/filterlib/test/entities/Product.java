@@ -27,13 +27,13 @@ import javax.persistence.UniqueConstraint;
     @UniqueConstraint(columnNames = {"PRODUCTCODE"})})
 @NamedQueries({
     @NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p"),
-    @NamedQuery(name = "Product.findByProductcode", query = "SELECT p FROM Product p WHERE p.productcode = :productcode"),
-    @NamedQuery(name = "Product.findByProductname", query = "SELECT p FROM Product p WHERE p.productname = :productname"),
-    @NamedQuery(name = "Product.findByProductline", query = "SELECT p FROM Product p WHERE p.productline = :productline"),
-    @NamedQuery(name = "Product.findByProductcale", query = "SELECT p FROM Product p WHERE p.productscale = :productscale"),
-    @NamedQuery(name = "Product.findByProductvendor", query = "SELECT p FROM Product p WHERE p.productvendor = :productvendor"),
-    @NamedQuery(name = "Product.findByQuantityinstock", query = "SELECT p FROM Product p WHERE p.quantityinstock = :quantityinstock"),
-    @NamedQuery(name = "Product.findByBuyprice", query = "SELECT p FROM Product p WHERE p.buyprice = :buyprice"),
+    @NamedQuery(name = "Product.findByProductcode", query = "SELECT p FROM Product p WHERE p.code = :code"),
+    @NamedQuery(name = "Product.findByProductname", query = "SELECT p FROM Product p WHERE p.name = :name"),
+    @NamedQuery(name = "Product.findByProductline", query = "SELECT p FROM Product p WHERE p.productLine = :productLine"),
+    @NamedQuery(name = "Product.findByProductcale", query = "SELECT p FROM Product p WHERE p.scale = :scale"),
+    @NamedQuery(name = "Product.findByProductvendor", query = "SELECT p FROM Product p WHERE p.vendor = :vendor"),
+    @NamedQuery(name = "Product.findByQuantityinstock", query = "SELECT p FROM Product p WHERE p.quantityInStock = :quantityInStock"),
+    @NamedQuery(name = "Product.findByBuyprice", query = "SELECT p FROM Product p WHERE p.buyPrice = :buyPrice"),
     @NamedQuery(name = "Product.findByMsrp", query = "SELECT p FROM Product p WHERE p.msrp = :msrp")})
 public class Product implements Serializable {
 
@@ -60,7 +60,7 @@ public class Product implements Serializable {
     private Double buyPrice;
     @Column(name = "MSRP", precision = 52)
     private Double msrp;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "products")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
     private List<OrderDetail> orderDetailList;
 
     public Product() {

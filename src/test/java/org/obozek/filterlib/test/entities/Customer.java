@@ -26,19 +26,19 @@ import javax.persistence.UniqueConstraint;
     @UniqueConstraint(columnNames = {"CUSTOMERNUMBER"})})
 @NamedQueries({
     @NamedQuery(name = "Customer.findAll", query = "SELECT c FROM Customer c"),
-    @NamedQuery(name = "Customer.findByCustomernumber", query = "SELECT c FROM Customer c WHERE c.customernumber = :customernumber"),
-    @NamedQuery(name = "Customer.findByCustomername", query = "SELECT c FROM Customer c WHERE c.customername = :customername"),
-    @NamedQuery(name = "Customer.findByContactlastname", query = "SELECT c FROM Customer c WHERE c.contactlastname = :contactlastname"),
-    @NamedQuery(name = "Customer.findByContactfirstname", query = "SELECT c FROM Customer c WHERE c.contactfirstname = :contactfirstname"),
+    @NamedQuery(name = "Customer.findByCustomernumber", query = "SELECT c FROM Customer c WHERE c.customerNumber = :customerNumber"),
+    @NamedQuery(name = "Customer.findByCustomername", query = "SELECT c FROM Customer c WHERE c.customerName = :customerName"),
+    @NamedQuery(name = "Customer.findByContactlastname", query = "SELECT c FROM Customer c WHERE c.contactLastname = :contactLastname"),
+    @NamedQuery(name = "Customer.findByContactfirstname", query = "SELECT c FROM Customer c WHERE c.contactFirstname = :contactFirstname"),
     @NamedQuery(name = "Customer.findByPhone", query = "SELECT c FROM Customer c WHERE c.phone = :phone"),
-    @NamedQuery(name = "Customer.findByAddressline1", query = "SELECT c FROM Customer c WHERE c.addressline1 = :addressline1"),
-    @NamedQuery(name = "Customer.findByAddressline2", query = "SELECT c FROM Customer c WHERE c.addressline2 = :addressline2"),
+    @NamedQuery(name = "Customer.findByAddressline1", query = "SELECT c FROM Customer c WHERE c.addressLine1 = :addressLine1"),
+    @NamedQuery(name = "Customer.findByAddressline2", query = "SELECT c FROM Customer c WHERE c.addressLine2 = :addressLine2"),
     @NamedQuery(name = "Customer.findByCity", query = "SELECT c FROM Customer c WHERE c.city = :city"),
     @NamedQuery(name = "Customer.findByState", query = "SELECT c FROM Customer c WHERE c.state = :state"),
-    @NamedQuery(name = "Customer.findByPostalcode", query = "SELECT c FROM Customer c WHERE c.postalcode = :postalcode"),
+    @NamedQuery(name = "Customer.findByPostalcode", query = "SELECT c FROM Customer c WHERE c.postalCode = :postalCode"),
     @NamedQuery(name = "Customer.findByCountry", query = "SELECT c FROM Customer c WHERE c.country = :country"),
-    @NamedQuery(name = "Customer.findBySalesrepemployeenumber", query = "SELECT c FROM Customer c WHERE c.salesrepemployeenumber = :salesrepemployeenumber"),
-    @NamedQuery(name = "Customer.findByCreditlimit", query = "SELECT c FROM Customer c WHERE c.creditlimit = :creditlimit")})
+    @NamedQuery(name = "Customer.findBySalesrepemployeenumber", query = "SELECT c FROM Customer c WHERE c.salesRepEmployeeNumber = :salesRepEmployeeNumber"),
+    @NamedQuery(name = "Customer.findByCreditlimit", query = "SELECT c FROM Customer c WHERE c.creditLimit = :creditLimit")})
 public class Customer implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -71,7 +71,7 @@ public class Customer implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "CREDITLIMIT", precision = 52)
     private Double creditLimit;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customers")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
     private List<Payment> paymentList;
     @OneToMany(mappedBy = "customernumber")
     private List<Order> orderList;

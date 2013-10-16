@@ -23,9 +23,9 @@ import javax.persistence.UniqueConstraint;
 @Table(name = "PRODUCTLINES", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"PRODUCTLINE"})})
 @NamedQueries({
-    @NamedQuery(name = "Productlines.findAll", query = "SELECT p FROM Productlines p"),
-    @NamedQuery(name = "Productlines.findByProductline", query = "SELECT p FROM Productlines p WHERE p.productline = :productline"),
-    @NamedQuery(name = "Productlines.findByTextdescription", query = "SELECT p FROM Productlines p WHERE p.textdescription = :textdescription")})
+    @NamedQuery(name = "Productlines.findAll", query = "SELECT p FROM ProductLine p"),
+    @NamedQuery(name = "Productlines.findByProductline", query = "SELECT p FROM ProductLine p WHERE p.productLine = :productLine"),
+    @NamedQuery(name = "Productlines.findByTextdescription", query = "SELECT p FROM ProductLine p WHERE p.textDescription = :textDescription")})
 public class ProductLine implements Serializable {
 
     private static final long serialVersionUID = 1L;
